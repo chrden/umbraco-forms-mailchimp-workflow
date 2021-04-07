@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco-Forms-Mailchimp-Workflow", "CD.UmbracoFormsMailchimpWorkflow\CD.UmbracoFormsMailchimpWorkflow.csproj", "{0712521C-8A6D-40D2-806C-556A9B0C1A87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CD.UmbracoFormsMailchimpWorkflow", "CD.UmbracoFormsMailchimpWorkflow\CD.UmbracoFormsMailchimpWorkflow.csproj", "{0712521C-8A6D-40D2-806C-556A9B0C1A87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
