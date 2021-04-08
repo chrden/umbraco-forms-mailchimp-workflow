@@ -55,3 +55,4 @@ src/.vs/
 *.user
 *.suo
 **/App_Data/ClientDependency
+src/DemoSite/App_Plugins/CD.UmbracoFormsMailchimpWorkflow
