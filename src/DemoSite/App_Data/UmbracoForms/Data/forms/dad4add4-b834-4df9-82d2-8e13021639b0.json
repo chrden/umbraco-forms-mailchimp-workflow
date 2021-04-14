@@ -137,7 +137,9 @@
   "cssClass": null,
   "disableDefaultStylesheet": false,
   "useClientDependency": false,
-  "workflows": [],
+  "workflows": [
+    "84c60bc9-ecb1-49c3-bf37-1fd17d9158d7"
+  ],
   "datasource": null,
   "submitLabel": "Submit",
   "nextLabel": "Next",

@@ -1,4 +1,10 @@
 ﻿angular.module("umbraco").controller("CD.UmbracoFormsMailchimpWorkflow.FieldMapping",
     function ($scope, fieldmappingResource) {
-        alert("The controller has landed");
+
+        $scope.getMcFields = function() {
+            fieldmappingResource.getMailchimpListMergeFields($scope.model.mcListId).then(function (response) {
+                $scope.mcFields = response.data
+            });
+        }
+
     });

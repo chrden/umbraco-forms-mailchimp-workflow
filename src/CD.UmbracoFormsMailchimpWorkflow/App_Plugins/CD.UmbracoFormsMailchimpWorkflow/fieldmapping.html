@@ -1,3 +1,13 @@
 ﻿<div ng-controller="CD.UmbracoFormsMailchimpWorkflow.FieldMapping">
-    <textarea ng-model="model.value"></textarea>
+    <div>
+        <input type="text" ng-model="model.mcListId" />
+        <button class="btn btn-primary btn-small" ng-click="getMcFields()">
+            Get MC fields
+        </button>
+    </div>
+    <ul>
+        <li ng-repeat="mcField in mcFields">
+            {{mcField.Name}}
+        </li>
+    </ul>
 </div>

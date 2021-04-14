@@ -9,9 +9,6 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Workflow
 {
     public class MailchimpWorkflow : WorkflowType
     {
-        [Setting("List Id", Alias = "listId", Description = "Unique list id of the list in Mailchimp")]
-        public string ListId { get; set; }
-
         [Setting("Field mapping", Alias = "fieldMapping", Description = "Map the Umbraco Forms fields to the fields in the Mailchimp list", View = "~/App_Plugins/CD.UmbracoFormsMailchimpWorkflow/fieldmapping.html")]
         public string FieldMapping { get; set; }
 
@@ -29,7 +26,7 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Workflow
 
         public override List<Exception> ValidateSettings()
         {
-            throw new NotImplementedException();
+            return new List<Exception>();
         }
     }
 }

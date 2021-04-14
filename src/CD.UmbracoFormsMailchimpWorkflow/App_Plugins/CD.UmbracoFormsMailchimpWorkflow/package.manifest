@@ -19,6 +19,7 @@
     ,
     // array of files we want to inject into the application on app_start
     javascript: [
-        '~/App_Plugins/CD.UmbracoFormsMailchimpWorkflow/fieldmapping.controller.js'
+        '~/App_Plugins/CD.UmbracoFormsMailchimpWorkflow/fieldmapping.controller.js',
+        '~/App_Plugins/CD.UmbracoFormsMailchimpWorkflow/fieldmapping.resource.js',
     ]
 }

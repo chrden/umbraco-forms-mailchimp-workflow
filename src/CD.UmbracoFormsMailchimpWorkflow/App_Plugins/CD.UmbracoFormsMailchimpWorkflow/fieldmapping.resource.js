@@ -6,9 +6,9 @@
                 return umbRequestHelper.resourcePromise(
                     $http.get("backoffice/CD/FieldMappingApi/GetUmbracoFormFields"), "Failed to retrieve Umbraco Forms data");
             },
-            getMailchimpListMergeFields: function () {
+            getMailchimpListMergeFields: function (mcListId) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/CD/FieldMappingApi/GetMailchimpListMergeFields"), "Failed to retrieve Mailchimp data");
+                    $http.get("backoffice/CD/FieldMappingApi/GetMailchimpListMergeFields", { params: { mcListId: mcListId} }), "Failed to retrieve Mailchimp data");
             }
         }
     });
