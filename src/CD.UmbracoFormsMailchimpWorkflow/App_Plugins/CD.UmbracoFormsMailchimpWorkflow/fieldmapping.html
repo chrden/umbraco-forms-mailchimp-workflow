@@ -1,13 +1,21 @@
 ﻿<div ng-controller="CD.UmbracoFormsMailchimpWorkflow.FieldMapping">
     <div>
-        <input type="text" ng-model="model.mcListId" />
+        <label for="mcListId">Mailchimp list ID</label>
+        <input type="text" ng-model="model.mcListId" id="mcListId" />
         <button class="btn btn-primary btn-small" ng-click="getMcFields()">
             Get MC fields
         </button>
     </div>
-    <ul>
-        <li ng-repeat="mcField in mcFields">
-            {{mcField.Name}}
-        </li>
-    </ul>
+    <div>
+        <div>
+            <label for="mcField">Mailchimp fields</label>
+        </div>
+        <div style="position: relative;">
+            <umb-dropdown ng-if="model.dropdownOpen" on-close="model.close()" umb-keyboard-list>
+                <umb-dropdown-item ng-repeat="item in model.items">
+                    <button type="button" class="btn-reset" ng-click="model.select(item)">{{ item.name }}</button>
+                </umb-dropdown-item>
+            </umb-dropdown>
+        </div>
+    </div>
 </div>
