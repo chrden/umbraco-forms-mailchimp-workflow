@@ -296,6 +296,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Api\UmbracoFormsMailchimpWorkflow\FieldMappingApiController.cs" />
+    <Compile Include="Models\Response\Lists\MailchimpListsResponse.cs" />
+    <Compile Include="Models\Response\MergeFields\MailchimpMergeFieldsResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Workflow\MailchimpWorkflow.cs" />
   </ItemGroup>

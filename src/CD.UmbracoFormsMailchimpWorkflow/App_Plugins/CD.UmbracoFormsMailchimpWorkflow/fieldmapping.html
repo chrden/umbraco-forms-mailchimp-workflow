@@ -1,21 +1,17 @@
 ﻿<div ng-controller="CD.UmbracoFormsMailchimpWorkflow.FieldMapping">
     <div>
-        <label for="mcListId">Mailchimp list ID</label>
-        <input type="text" ng-model="model.mcListId" id="mcListId" />
-        <button class="btn btn-primary btn-small" ng-click="getMcFields()">
-            Get MC fields
-        </button>
+        <select ng-if="model.showListsDropdown" ng-model="model.mcListId" ng-options="list.id as list.name for list in model.mcLists" ng-change="getListFields()">
+            <option value="">Select a Mailchimp list</option>
+        </select>
     </div>
     <div>
-        <div>
-            <label for="mcField">Mailchimp fields</label>
-        </div>
-        <div style="position: relative;">
-            <umb-dropdown ng-if="model.dropdownOpen" on-close="model.close()" umb-keyboard-list>
-                <umb-dropdown-item ng-repeat="item in model.items">
-                    <button type="button" class="btn-reset" ng-click="model.select(item)">{{ item.name }}</button>
-                </umb-dropdown-item>
-            </umb-dropdown>
-        </div>
+        <select ng-if="model.showFieldsDropdown" ng-model="model.mcFieldId" ng-options="field.merge_id as field.name for field in model.mcFields">
+            <option value="">Select a Mailchimp list field</option>
+        </select>
+    </div>
+    <div>
+        <select ng-model="model.fieldId" ng-options="field.alias as field.caption for field in model.fields">
+            <option value="">Select a form field</option>
+        </select>
     </div>
 </div>

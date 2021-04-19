@@ -8,7 +8,11 @@
             },
             getMailchimpListMergeFields: function (mcListId) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/CD/FieldMappingApi/GetMailchimpListMergeFields", { params: { mcListId: mcListId} }), "Failed to retrieve Mailchimp data");
+                    $http.get("backoffice/CD/FieldMappingApi/GetMailchimpListMergeFields", { params: { listId: mcListId} }), "Failed to retrieve Mailchimp list fields");
+            },
+            getMailchimpLists: function () {
+                return umbRequestHelper.resourcePromise(
+                    $http.get("backoffice/CD/FieldMappingApi/GetMailchimpLists"), "Failed to retrieve Mailchimp lists");
             }
         }
     });
