@@ -1,17 +1,57 @@
 ﻿<div ng-controller="CD.UmbracoFormsMailchimpWorkflow.FieldMapping">
-    <div>
-        <select ng-if="model.showListsDropdown" ng-model="model.mcListId" ng-options="list.id as list.name for list in model.mcLists" ng-change="getListFields()">
+    <div class="control-row -margin-bottom">
+        <div class="umb-forms-mapping-header">
+            <div class="umb-forms-mapping-field -no-margin-left">Select Mailchimp list</div>
+        </div>
+        <select ng-if="model.showListsDropdown" ng-model="model.listId" ng-options="list.id as list.name for list in model.lists" ng-change="getListFields()">
             <option value="">Select a Mailchimp list</option>
         </select>
     </div>
-    <div>
+    <!--<div>
         <select ng-if="model.showFieldsDropdown" ng-model="model.mcFieldId" ng-options="field.merge_id as field.name for field in model.mcFields">
             <option value="">Select a Mailchimp list field</option>
         </select>
-    </div>
-    <div>
+    </div>-->
+    <!--<div>
         <select ng-model="model.fieldId" ng-options="field.alias as field.caption for field in model.fields">
             <option value="">Select a form field</option>
         </select>
+    </div>-->
+    <div class="control-row" ng-if="model.listId">
+        <div class="umb-forms-mappings" ng-if="model.fieldMappings.length > 0">
+
+            <div class="umb-forms-mapping-header">
+                <div class="umb-forms-mapping-field -no-margin-left">Value</div>
+                <!--<div class="umb-forms-mapping-field">(or) Static value</div>-->
+                <div class="umb-forms-mapping-field">Mailchimp list field</div>
+                <div class="umb-forms-mapping-remove -no-margin-right"></div>
+            </div>
+
+            <div class="umb-forms-mapping" ng-repeat="fieldMapping in model.fieldMappings">
+
+                <div class="umb-forms-mapping-field -no-margin-left" ng-if="!fieldMapping.isStatic">
+                    <select ng-model="fieldMapping.formFieldAlias" ng-options="formField.alias as formField.caption for formField in model.fields" class="-full-width">
+                    </select>
+                </div>
+
+                <div class="umb-forms-mapping-field -no-margin-left" ng-if="fieldMapping.isStatic">
+                    <input class="-full-width-input" type="text" placeholder="Static value" ng-model="fieldMapping.staticValue" />
+                </div>
+
+                <div class="umb-forms-mapping-field">
+                    <select ng-model="fieldMapping.listFieldId" ng-options="listField.merge_id as listField.name for listField in model.listFields" class="-full-width">
+                    </select>
+                </div>
+
+                <div class="umb-forms-mapping-remove -no-margin-right">
+                    <a href="" ng-click="deleteFieldMapping($index)">
+                        <i class="icon-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="-no-margin-left">
+            <umb-button-group default-button="model.mapBtn.default" sub-buttons="model.mapBtn.secondary" direction="up"></umb-button-group>
+        </div>
     </div>
 </div>
