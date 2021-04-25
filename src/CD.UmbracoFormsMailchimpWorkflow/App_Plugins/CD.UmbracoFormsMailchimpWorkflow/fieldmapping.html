@@ -1,28 +1,23 @@
-﻿<div ng-controller="CD.UmbracoFormsMailchimpWorkflow.FieldMapping">
-    <div class="control-row -margin-bottom">
+﻿<div ng-controller="CD.UmbracoFormsMailchimpWorkflow.FieldMapping" class="umb-property-editor">
+    <div class="control-row -margin-bottom" ng-if="model.showListsDropdown">
         <div class="umb-forms-mapping-header">
             <div class="umb-forms-mapping-field -no-margin-left">Select Mailchimp list</div>
         </div>
-        <select ng-if="model.showListsDropdown" ng-model="model.listId" ng-options="list.id as list.name for list in model.lists" ng-change="getListFields()">
+        <select ng-model="model.listId" ng-options="list.id as list.name for list in model.lists" ng-change="getListFields()">
             <option value="">Select a Mailchimp list</option>
         </select>
     </div>
-    <!--<div>
-        <select ng-if="model.showFieldsDropdown" ng-model="model.mcFieldId" ng-options="field.merge_id as field.name for field in model.mcFields">
-            <option value="">Select a Mailchimp list field</option>
-        </select>
-    </div>-->
-    <!--<div>
-        <select ng-model="model.fieldId" ng-options="field.alias as field.caption for field in model.fields">
-            <option value="">Select a form field</option>
-        </select>
-    </div>-->
+    <div ng-if="model.error">
+        <small class="text-error">
+            There was an error retrieving the lists from Mailchimp.<br/>
+            Please check your API key is configured correctly.
+        </small>
+    </div>
     <div class="control-row" ng-if="model.listId">
         <div class="umb-forms-mappings" ng-if="model.fieldMappings.length > 0">
 
             <div class="umb-forms-mapping-header">
                 <div class="umb-forms-mapping-field -no-margin-left">Value</div>
-                <!--<div class="umb-forms-mapping-field">(or) Static value</div>-->
                 <div class="umb-forms-mapping-field">Mailchimp list field</div>
                 <div class="umb-forms-mapping-remove -no-margin-right"></div>
             </div>

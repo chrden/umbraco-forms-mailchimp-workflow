@@ -7,8 +7,7 @@
   "workflowTypeId": "68bdc512-f67c-480f-921c-3a7a1b35c512",
   "executesOn": "Submitted",
   "settings": {
-    "ListId": "",
-    "FieldMapping": ""
+    "FieldMapping": "{\"listId\":\"5fb2d1ec42\",\"fieldMappings\":[{\"formFieldAlias\":\"name\",\"listFieldId\":1,\"staticValue\":\"\",\"isStatic\":false,\"$$hashKey\":\"object:373\"},{\"formFieldAlias\":\"email\",\"listFieldId\":2,\"staticValue\":\"\",\"isStatic\":false,\"$$hashKey\":\"object:383\"},{\"formFieldAlias\":\"\",\"listFieldId\":3,\"staticValue\":\"TESTING\",\"isStatic\":true,\"$$hashKey\":\"object:399\"}]}"
   },
   "sortOrder": 0
 }
