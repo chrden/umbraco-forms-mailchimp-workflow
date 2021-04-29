@@ -297,8 +297,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Api\UmbracoFormsMailchimpWorkflow\FieldMappingApiController.cs" />
-    <Compile Include="Models\Response\Lists\MailchimpListsResponse.cs" />
-    <Compile Include="Models\Response\MergeFields\MailchimpMergeFieldsResponse.cs" />
+    <Compile Include="Models\Api\Response\MailchimpListsResponse.cs" />
+    <Compile Include="Models\Api\Response\MailchimpMergeFieldsResponse.cs" />
+    <Compile Include="Models\Mailchimp\List.cs" />
+    <Compile Include="Models\Mailchimp\MergeField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Workflow\MailchimpWorkflow.cs" />
   </ItemGroup>
@@ -311,7 +313,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Dto\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

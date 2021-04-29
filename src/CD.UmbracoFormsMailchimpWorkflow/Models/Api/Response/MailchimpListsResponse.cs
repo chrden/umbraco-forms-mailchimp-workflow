@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CD.UmbracoFormsMailchimpWorkflow.Models.Response.Lists
+namespace CD.UmbracoFormsMailchimpWorkflow.Models.Api.Response
 {
     public class MailchimpListsResponse
     {

@@ -1,11 +1,13 @@
-﻿using CD.UmbracoFormsMailchimpWorkflow.Models.Response.Lists;
-using CD.UmbracoFormsMailchimpWorkflow.Models.Response.MergeFields;
+﻿using CD.UmbracoFormsMailchimpWorkflow.Models.Api.Response;
+using CD.UmbracoFormsMailchimpWorkflow.Models.Mailchimp;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Umbraco.Core.Logging;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
@@ -26,30 +28,6 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Controllers.Api.UmbracoFormsMailchimp
             this.logger = logger;
         }
 
-        public IEnumerable<string> GetUmbracoFormFields() { return null; }
-
-        public IEnumerable<Merge_Field> GetMailchimpListMergeFields(string listId)
-        {
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    //client.BaseAddress = new Uri(MailchimpBaseAddress);
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", MailchimpApiKey);
-
-                    var response = client.GetStringAsync(string.Concat(MailchimpBaseAddress, "/lists/", listId, "/merge-fields")).Result;
-
-                    return JsonConvert.DeserializeObject<MailchimpMergeFieldsResponse>(response).merge_fields;
-                }
-                catch (Exception ex)
-                {
-                    logger.Error<FieldMappingApiController>(ex);
-                }
-
-                return null;
-            }
-        }
-
         public IEnumerable<MailchimpList> GetMailchimpLists()
         {
             using (var client = new HttpClient())
@@ -62,6 +40,39 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Controllers.Api.UmbracoFormsMailchimp
                     var response = client.GetStringAsync(string.Concat(MailchimpBaseAddress, "/lists")).Result;
 
                     return JsonConvert.DeserializeObject<MailchimpListsResponse>(response).lists;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error<FieldMappingApiController>(ex);
+                }
+
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<MergeField>> GetMailchimpListMergeFields(string listId)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    //client.BaseAddress = new Uri(MailchimpBaseAddress);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", MailchimpApiKey);
+
+                    var response = await client.GetStringAsync(string.Concat(MailchimpBaseAddress, "/lists/", listId, "/merge-fields"));
+
+                    if (JsonConvert.DeserializeObject<MailchimpMergeFieldsResponse>(response) is MailchimpMergeFieldsResponse mergeFieldsResponse)
+                    {
+                        return
+                            mergeFieldsResponse.MergeFields
+                            .Select(mf =>
+                                new MergeField
+                                {
+                                    Name = mf.Name,
+                                    Tag = mf.Tag,
+                                }
+                            );
+                    }
                 }
                 catch (Exception ex)
                 {
