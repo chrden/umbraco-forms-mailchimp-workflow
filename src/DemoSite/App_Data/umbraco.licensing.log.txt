@@ -76,3 +76,7 @@ Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mai
 Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:
 Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:
 Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:
+Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:
+Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:
+Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:
+Could not find any UmbracoForms licensing files in C:\Projects\umbraco-forms-mailchimp-workflow\src\DemoSite\bin:

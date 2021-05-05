@@ -25,16 +25,16 @@
             <div class="umb-forms-mapping" ng-repeat="fieldMapping in model.fieldMappings">
 
                 <div class="umb-forms-mapping-field -no-margin-left" ng-if="!fieldMapping.isStatic">
-                    <select ng-model="fieldMapping.formFieldAlias" ng-options="formField.alias as formField.caption for formField in model.fields" class="-full-width">
+                    <select ng-model="fieldMapping.formFieldAlias" ng-options="formField.alias as formField.caption for formField in model.fields" ng-change="saveMapping()" class="-full-width">
                     </select>
                 </div>
 
                 <div class="umb-forms-mapping-field -no-margin-left" ng-if="fieldMapping.isStatic">
-                    <input class="-full-width-input" type="text" placeholder="Static value" ng-model="fieldMapping.staticValue" />
+                    <input class="-full-width-input" type="text" placeholder="Static value" ng-model="fieldMapping.staticValue" ng-keyup="saveMapping()" />
                 </div>
 
                 <div class="umb-forms-mapping-field">
-                    <select ng-model="fieldMapping.listFieldId" ng-options="listField.Tag as listField.Name for listField in model.listFields" class="-full-width">
+                    <select ng-model="fieldMapping.listFieldId" ng-options="listField.Tag as listField.Name for listField in model.listFields" ng-change="saveMapping()" class="-full-width">
                     </select>
                 </div>
 

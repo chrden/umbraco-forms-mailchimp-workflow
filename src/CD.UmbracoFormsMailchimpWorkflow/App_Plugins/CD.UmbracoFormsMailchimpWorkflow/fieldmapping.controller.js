@@ -42,36 +42,23 @@
 
                 $scope.model.showListsDropdown = true;
                 $scope.model.listId = result.listId;
-                $scope.getListFields(result.fieldMappings);
+                $scope.getListFields();
 
-                $.each(result.fieldMappings, function (i, item) {
-                    $scope.model.fieldMappings.push({
-                        formFieldAlias: item.formFieldAlias,
-                        listFieldId: item.listFieldId,
-                        staticValue: item.staticValue,
-                        isStatic: item.isStatic
-                    });
-                });
+                if (result.fieldMappings) {
+                    $scope.model.fieldMappings = result.fieldMappings;
+                }
             }
         }
 
-        $scope.getListFields = function (mappings) {
+        $scope.getListFields = function () {
             if ($scope.model.listId) {
                 fieldmappingResource.getMailchimpListMergeFields($scope.model.listId).then(function (response) {
                     $scope.model.listFields = response;
-                    if (mappings) {
-                        $scope.model.fieldMappings = mappings;
-                    }
-                    else {
-                        $scope.model.fieldMappings = [];
-                    }
                 });
             }
             else {
                 $scope.model.fieldMappings = [];
             }
-
-            save();
         }
 
         $scope.addFieldMapping = function (isStatic) {
@@ -88,6 +75,10 @@
         $scope.deleteFieldMapping = function (i) {
             $scope.model.fieldMappings.splice(i, 1);
 
+            save();
+        };
+
+        $scope.saveMapping = function () {
             save();
         };
 
