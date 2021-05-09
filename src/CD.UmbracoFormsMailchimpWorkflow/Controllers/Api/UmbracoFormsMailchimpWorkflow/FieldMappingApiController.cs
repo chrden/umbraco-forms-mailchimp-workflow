@@ -63,7 +63,17 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Controllers.Api.UmbracoFormsMailchimp
 
                     if (JsonConvert.DeserializeObject<MailchimpMergeFieldsResponse>(response) is MailchimpMergeFieldsResponse mergeFieldsResponse)
                     {
-                        return
+                        var mergeFields =
+                            new List<MergeField>()
+                            {
+                                new MergeField
+                                {
+                                    Name = "Email",
+                                    Tag = "EMAIL"
+                                }
+                            };
+
+                        mergeFields.AddRange(
                             mergeFieldsResponse.MergeFields
                             .Select(mf =>
                                 new MergeField
@@ -71,7 +81,10 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Controllers.Api.UmbracoFormsMailchimp
                                     Name = mf.Name,
                                     Tag = mf.Tag,
                                 }
-                            );
+                            )
+                        );
+
+                        return mergeFields;
                     }
                 }
                 catch (Exception ex)
