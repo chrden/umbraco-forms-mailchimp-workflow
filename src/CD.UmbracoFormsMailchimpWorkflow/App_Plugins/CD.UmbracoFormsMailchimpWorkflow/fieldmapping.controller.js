@@ -26,12 +26,11 @@
             fieldmappingResource.getMailchimpLists().then(function (response) {
                 if (response) {
                     $scope.model.lists = response;
-                    $scope.model.loading = false;
                 }
                 else {
                     $scope.model.error = true;
-                    $scope.model.loading = false;
                 }
+                $scope.model.loading = false;
             }, function () {
                 $scope.model.error = true;
                 $scope.model.loading = false;
