@@ -2,8 +2,8 @@
     function ($scope, fieldmappingResource) {
 
         $scope.model.error = false;
+        $scope.model.loading = true;
         $scope.model.fieldMappings = [];
-        $scope.model.showListsDropdown = false;
 
         $scope.model.mapBtn = {
             default: {
@@ -25,16 +25,16 @@
         function init() {
             fieldmappingResource.getMailchimpLists().then(function (response) {
                 if (response) {
-                    $scope.model.showListsDropdown = true;
                     $scope.model.lists = response;
+                    $scope.model.loading = false;
                 }
                 else {
                     $scope.model.error = true;
-                    $scope.model.showListsDropdown = false;
+                    $scope.model.loading = false;
                 }
             }, function () {
                 $scope.model.error = true;
-                $scope.model.showListsDropdown = false;
+                $scope.model.loading = false;
             });
 
             if (!$scope.model.error && $scope.setting.value) {
