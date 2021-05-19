@@ -296,7 +296,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Composers\IoC.cs" />
     <Compile Include="Controllers\Api\UmbracoFormsMailchimpWorkflow\FieldMappingApiController.cs" />
+    <Compile Include="Services\MailchimpService.cs" />
     <Compile Include="Models\Api\Response\MailchimpListsResponse.cs" />
     <Compile Include="Models\Api\Response\MailchimpMergeFieldsResponse.cs" />
     <Compile Include="Models\Mailchimp\List.cs" />
@@ -315,6 +317,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Dto\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

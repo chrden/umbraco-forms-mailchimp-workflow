@@ -4,7 +4,7 @@
         <div class="umb-forms-mapping-header">
             <div class="umb-forms-mapping-field -no-margin-left">Select Mailchimp list</div>
         </div>
-        <select ng-model="model.listId" ng-options="list.id as list.name for list in model.lists" ng-change="getListFields()">
+        <select ng-model="model.listId" ng-options="list.Id as list.Name for list in model.lists" ng-change="getListFields()">
             <option value="">Select a Mailchimp list</option>
         </select>
     </div>
