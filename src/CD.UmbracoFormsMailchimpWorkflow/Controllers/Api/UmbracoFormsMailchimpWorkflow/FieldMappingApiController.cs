@@ -1,4 +1,4 @@
-﻿using CD.UmbracoFormsMailchimpWorkflow.Models.Mailchimp;
+﻿using CD.UmbracoFormsMailchimpWorkflow.Models.Dto.Mailchimp;
 using CD.UmbracoFormsMailchimpWorkflow.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;

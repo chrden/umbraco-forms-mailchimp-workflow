@@ -1,4 +1,4 @@
-﻿namespace CD.UmbracoFormsMailchimpWorkflow.Models.Mailchimp
+﻿namespace CD.UmbracoFormsMailchimpWorkflow.Models.Dto.Mailchimp
 {
     public class List
     {

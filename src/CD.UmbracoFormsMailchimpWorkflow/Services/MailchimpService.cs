@@ -1,5 +1,5 @@
 ﻿using CD.UmbracoFormsMailchimpWorkflow.Models.Api.Response;
-using CD.UmbracoFormsMailchimpWorkflow.Models.Mailchimp;
+using CD.UmbracoFormsMailchimpWorkflow.Models.Dto.Mailchimp;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -41,12 +41,12 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
 
                     if (JsonConvert.DeserializeObject<MailchimpListsResponse>(response) is MailchimpListsResponse mailchimpListsResponse)
                     {
-                        return mailchimpListsResponse.lists
+                        return mailchimpListsResponse.Lists
                             .Select(l =>
                                 new List
                                 {
-                                    Id = l.id,
-                                    Name = l.name
+                                    Id = l.Id,
+                                    Name = l.Name
                                 }
                         );
                     }
