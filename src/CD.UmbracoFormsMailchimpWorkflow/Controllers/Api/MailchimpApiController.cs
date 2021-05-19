@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 
-namespace CD.UmbracoFormsMailchimpWorkflow.Controllers.Api.UmbracoFormsMailchimpWorkflow
+namespace CD.UmbracoFormsMailchimpWorkflow.Controllers.Api
 {
     [PluginController("CD")]
-    public class FieldMappingApiController : UmbracoAuthorizedJsonController
+    public class MailchimpApiController : UmbracoAuthorizedJsonController
     {
         private readonly IMailchimpService mailchimpService;
 
-        public FieldMappingApiController(IMailchimpService mailchimpService)
+        public MailchimpApiController(IMailchimpService mailchimpService)
         {
             this.mailchimpService = mailchimpService;
         }

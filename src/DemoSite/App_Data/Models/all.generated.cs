@@ -6,7 +6,7 @@ using  Umbraco.Core.Models;
 using  Umbraco.Core.Models.PublishedContent;
 using  Umbraco.Web;
 using  Umbraco.ModelsBuilder.Embedded;
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "77f076140687fa3d")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "1d11f610d0d8eca0")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -60,6 +60,13 @@ namespace Umbraco.Web.PublishedModels
 		{ }
 
 		// properties
+
+		///<summary>
+		/// MC mapping
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.12.2")]
+		[ImplementPropertyType("mCMapping")]
+		public object MCmapping => this.Value("mCMapping");
 	}
 
 	/// <summary>Folder</summary>
