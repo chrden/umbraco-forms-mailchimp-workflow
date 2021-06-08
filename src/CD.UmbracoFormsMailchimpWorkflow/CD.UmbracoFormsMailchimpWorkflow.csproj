@@ -298,6 +298,8 @@
   <ItemGroup>
     <Compile Include="Composers\IoC.cs" />
     <Compile Include="Controllers\Api\MailchimpApiController.cs" />
+    <Compile Include="Models\Api\Request\MailchimpAddSubscriberRequest.cs" />
+    <Compile Include="Models\FieldMapping.cs" />
     <Compile Include="Services\MailchimpService.cs" />
     <Compile Include="Models\Api\Response\MailchimpListsResponse.cs" />
     <Compile Include="Models\Api\Response\MailchimpMergeFieldsResponse.cs" />

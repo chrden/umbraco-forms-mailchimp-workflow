@@ -65,7 +65,7 @@
 
             $scope.model.fieldMappings.push({
                 formFieldAlias: "",
-                listFieldId: "",
+                listFieldTag: "",
                 staticValue: "",
                 isStatic
             });
@@ -82,11 +82,16 @@
         };
 
         function save() {
-            $scope.setting.value =
-                JSON.stringify({
-                    listId: $scope.model.listId,
-                    fieldMappings: $scope.model.fieldMappings
-                });
+            if ($scope.model.listId && $scope.model.fieldMappings.length > 0) {
+                $scope.setting.value =
+                    JSON.stringify({
+                        listId: $scope.model.listId,
+                        fieldMappings: $scope.model.fieldMappings
+                    });
+            }
+            else {
+                $scope.setting.value = null;
+            }
         }
 
         init();
