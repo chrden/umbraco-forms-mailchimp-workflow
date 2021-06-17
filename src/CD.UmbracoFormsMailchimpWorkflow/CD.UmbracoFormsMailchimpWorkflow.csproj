@@ -292,7 +292,8 @@
     <Content Include="App_Plugins\CD.UmbracoFormsMailchimpWorkflow\fieldmapping.controller.js" />
     <Content Include="App_Plugins\CD.UmbracoFormsMailchimpWorkflow\fieldmapping.html" />
     <Content Include="App_Plugins\CD.UmbracoFormsMailchimpWorkflow\fieldmapping.resource.js" />
-    <Content Include="App_Plugins\CD.UmbracoFormsMailchimpWorkflow\lang\en.xml" />
+    <Content Include="App_Plugins\CD.UmbracoFormsMailchimpWorkflow\lang\en-US.xml" />
+    <Content Include="App_Plugins\CD.UmbracoFormsMailchimpWorkflow\lang\en-GB.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
