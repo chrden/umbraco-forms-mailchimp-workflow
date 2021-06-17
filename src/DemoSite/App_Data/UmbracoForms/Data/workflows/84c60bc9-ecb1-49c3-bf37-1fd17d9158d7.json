@@ -3,7 +3,7 @@
   "name": "Push to Mailchimp",
   "form": "dad4add4-b834-4df9-82d2-8e13021639b0",
   "active": true,
-  "includeSensitiveData": "False",
+  "includeSensitiveData": "True",
   "workflowTypeId": "68bdc512-f67c-480f-921c-3a7a1b35c512",
   "executesOn": "Submitted",
   "settings": {

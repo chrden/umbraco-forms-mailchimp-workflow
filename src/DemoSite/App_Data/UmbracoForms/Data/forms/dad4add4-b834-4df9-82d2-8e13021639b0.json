@@ -48,12 +48,18 @@
                   "fieldTypeId": "3f92e01b-29e2-4a30-bf33-9df5580ed52c",
                   "prevalueSourceId": "00000000-0000-0000-0000-000000000000",
                   "dataSourceFieldKey": null,
-                  "containsSensitiveData": false,
+                  "containsSensitiveData": true,
                   "mandatory": false,
                   "regex": null,
                   "requiredErrorMessage": null,
                   "invalidErrorMessage": null,
-                  "condition": null,
+                  "condition": {
+                    "id": "00000000-0000-0000-0000-000000000000",
+                    "enabled": false,
+                    "actionType": "Show",
+                    "logicType": "All",
+                    "rules": []
+                  },
                   "settings": {
                     "DefaultValue": "",
                     "Placeholder": ""
