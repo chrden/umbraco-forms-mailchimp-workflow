@@ -56,3 +56,4 @@ src/.vs/
 *.suo
 **/App_Data/ClientDependency
 src/DemoSite/App_Plugins/CD.UmbracoFormsMailchimpWorkflow
+src/DemoSite/App_Data/umbraco.licensing.log.txt
