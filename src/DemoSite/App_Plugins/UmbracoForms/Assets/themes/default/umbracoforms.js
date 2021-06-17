@@ -43,7 +43,7 @@
 
     function init(e) {
 
-        var formItem = e.form;
+        var formItem = JSON.parse(decodeURI(e.form));
 
         var forms = document.querySelectorAll('.umbraco-forms-form');
 
@@ -125,10 +125,18 @@
 
             // bootstrap validation service.
             validationService.bootstrap();
-            
-            
-            
-             
+
+            // Without jquery validation, the previous page submit button click isn't sent with it's name,
+            // so can't be used server-side to determine whether to go forward or back.
+            // Hence we'll use an alternate method, setting a hidden field that's also used in the check.
+            var handlePreviousClicked = function () {
+                this.form.elements["PreviousClicked"].value = "clicked";
+            };
+            var previousButtonElements = document.getElementsByClassName("prev cancel");
+            for (var i = 0; i < previousButtonElements.length; i++) {
+                previousButtonElements[i].form.elements["PreviousClicked"].value = "";
+                previousButtonElements[i].addEventListener('click', handlePreviousClicked, false);
+            }
 
         } else if (typeof jQuery === "function" && $.validator) {
             //Jquery validation setup
@@ -175,48 +183,52 @@
      * @param {Form Element} formEl the element of the form
      */
     function dependencyCheck(formEl) {
-        //Only perform check if the global 'Umbraco.Sys' is null/undefined
-        //If present means we are in backoffice & that this is being rendered as a macro preview
-        //We do not need to perform this check here
-        if (typeof Umbraco !== "undefined" && typeof Umbraco.Sys !== "undefined") {
+        // Only perform check if the global 'Umbraco.Sys' is null/undefined.
+        // If present means we are in backoffice & that this is being rendered as a macro preview and We do not need to perform this check here.
+        // Similarly we need a check for if running in a rich text editor.
+        var isBackOffice = function () {
+            return typeof Umbraco !== "undefined" && typeof Umbraco.Sys !== "undefined";
+        };
+        var isBackOfficeRte = function () {
+            return document.body.id === "tinymce";
+        };
+        if (isBackOffice() || isBackOfficeRte()) {
             return;
         }
-        else {
 
-            var errorElement = document.createElement("div");
-            errorElement.className = "umbraco-forms missing-library";
-            errorElement.style.color = "#fff";
-            errorElement.style.backgroundColor = "#9d261d";
-            errorElement.style.padding = "15px";
-            errorElement.style.margin = "10px 0";
-            var errorMessage = "";
+        var errorElement = document.createElement("div");
+        errorElement.className = "umbraco-forms missing-library";
+        errorElement.style.color = "#fff";
+        errorElement.style.backgroundColor = "#9d261d";
+        errorElement.style.padding = "15px";
+        errorElement.style.margin = "10px 0";
+        var errorMessage = "";
 
-            //Ensure umbracoForm is not null
-            if (formEl) {
+        //Ensure umbracoForm is not null
+        if (formEl) {
 
-                //Check to see if the message for the form has been inserted already
-                var checkForExistinhgErr = formEl.getElementsByClassName('umbraco-forms missing-library');
-                if (checkForExistinhgErr.length > 0) {
-                    return;
-                }
+            //Check to see if the message for the form has been inserted already
+            var checkForExistinhgErr = formEl.getElementsByClassName('umbraco-forms missing-library');
+            if (checkForExistinhgErr.length > 0) {
+                return;
+            }
 
-                var hasValidationFramework = false;
+            var hasValidationFramework = false;
 
-                if (window.jQuery && $ && $.validator !== undefined) {
-                    hasValidationFramework = true;
-                } else if (window.aspnetValidation !== undefined) {
-                    hasValidationFramework = true;
-                }
+            if (window.jQuery && $ && $.validator !== undefined) {
+                hasValidationFramework = true;
+            } else if (window.aspnetValidation !== undefined) {
+                hasValidationFramework = true;
+            }
 
-                if(hasValidationFramework === false) {
-                    errorMessage = errorMessage + "Umbraco Forms requires a validation framework to run, please read documentation for posible options.";
-                }
+            if(hasValidationFramework === false) {
+                errorMessage = errorMessage + "Umbraco Forms requires a validation framework to run, please read documentation for posible options.";
+            }
 
-                if (errorMessage !== "") {
-                    errorElement.innerHTML = errorMessage + '<br/> <a href="https://our.umbraco.org/documentation/products/umbracoforms/developer/Prepping-Frontend/" target="_blank" style="text-decoration:underline; color:#fff;">See Umbraco Forms Documentation</a>';
+            if (errorMessage !== "") {
+                errorElement.innerHTML = errorMessage + '<br/> <a href="https://our.umbraco.org/documentation/products/umbracoforms/developer/Prepping-Frontend/" target="_blank" style="text-decoration:underline; color:#fff;">See Umbraco Forms Documentation</a>';
 
-                    formEl.insertBefore(errorElement, formEl.childNodes[0]);
-                }
+                formEl.insertBefore(errorElement, formEl.childNodes[0]);
             }
         }
     }
@@ -247,7 +259,7 @@
             var selectFields = page.querySelectorAll("select");
             for(var i=0; i<selectFields.length; i++) {
                 var field = selectFields[i];
-                formValues[field.getAttribute("id")] = field.querySelector("option[value='" + field.value + "']").innerText;
+                formValues[field.getAttribute("id")] = field.value ? field.querySelector("option[value='" + field.value + "']").innerText : null;
                 dataTypes[field.getAttribute("id")] = "select";
             };
 

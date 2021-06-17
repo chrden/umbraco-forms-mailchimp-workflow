@@ -240,6 +240,31 @@ angular.module("umbraco").controller("UmbracoForms.SettingTypes.File",
     }
   });
 
+angular.module("umbraco").controller("UmbracoForms.SettingTypes.NumericFieldController",
+  function ($scope) {
+
+    var vm = this;
+
+    // The prevalues setting is a string array in order: Min, Max, Default Value.
+    vm.min = parseFloat($scope.setting.prevalues[0]);
+    vm.max = parseFloat($scope.setting.prevalues[1]);
+    var defaultValue = parseFloat($scope.setting.prevalues[2]);
+
+    // Set the provided default value.
+    if (!$scope.setting.value) {
+      $scope.setting.value = defaultValue;
+    }
+
+    // Ensure we have a number.
+    vm.value = parseFloat($scope.setting.value);
+
+    vm.change = function () {
+      // Convert it back to a string.
+      $scope.setting.value = vm.value.toString();
+    }
+
+});
+
 angular.module("umbraco").controller("UmbracoForms.SettingTypes.Pickers.CheckboxController", function ($scope) {
 
 	var vm = this;
@@ -413,20 +438,19 @@ angular.module("umbraco").controller("UmbracoForms.SettingTypes.RangeController"
 
     var vm = this;
 
-    // The PreValues Settings is a string array in a certain order
-    // Min, Max, Step, Default
+     // The prevalues setting is a string array in order: Min, Max, Step, Default.
     var min = parseFloat($scope.setting.prevalues[0]);
     var max = parseFloat($scope.setting.prevalues[1]);
     var step = parseFloat($scope.setting.prevalues[2]);
     var defaultValue = parseFloat($scope.setting.prevalues[3]);
     var stepDecimalPlaces = getDecimalPlaces(step);
 
-    // Set the provided default value
+    // Set the provided default value.
     if (!$scope.setting.value) {
       $scope.setting.value = defaultValue;
     }
 
-    // Angular is complaining that the setting value is a string and not a proper number
+    // Ensure we have a number.
     vm.value = parseFloat($scope.setting.value);
 
     vm.sliderOptions = {
@@ -477,171 +501,184 @@ angular.module("umbraco").controller("UmbracoForms.SettingTypes.RangeController"
 	});
 
 angular.module("umbraco")
-.controller("UmbracoForms.Dashboards.FormsController",
+  .controller("UmbracoForms.Dashboards.FormsController",
     function ($scope, $location, $cookies, formResource, licensingResource, updatesResource, notificationsService, userService, securityResource, recordResource) {
 
-        var vm = this;
+      var vm = this;
 
-        vm.overlay = {
-            show: false,
-            title: "Congratulations",
-            description: "You've just installed Umbraco Forms - Let's create your first form"
-        };
+      vm.overlay = {
+        show: false,
+        title: "Congratulations",
+        description: "You've just installed Umbraco Forms - Let's create your first form"
+      };
 
-        var packageInstall = $cookies.get("umbPackageInstallId");
+      var packageInstall = $cookies.get("umbPackageInstallId");
 
-        if (packageInstall) {
+      if (packageInstall) {
+        vm.overlay.show = true;
+        $cookies.put("umbPackageInstallId", "");
+      }
+
+      //Default for canManageForms is false
+      //Need a record in security to ensure user has access to edit/create forms
+      vm.userCanManageForms = false;
+
+      //Get Current User - To Check if the user Type is Admin
+      userService.getCurrentUser().then(function (response) {
+        vm.currentUser = response;
+        vm.isAdminUser = response.userGroups.includes("admin");
+
+        securityResource.getByUserId(vm.currentUser.id).then(function (response) {
+          vm.userCanManageForms = response.data.userSecurity.manageForms;
+        });
+      });
+
+      //if not initial install, but still do not have forms - display a message
+      if (!vm.overlay.show) {
+
+        //Check if we have any forms created yet - by chekcing number of items back from JSON response
+        formResource.getOverView().then(function (response) {
+          if (response.data.length === 0) {
             vm.overlay.show = true;
-            $cookies.put("umbPackageInstallId", "");
-        }
+            vm.overlay.title = "Create a form";
+            vm.overlay.description = "You do not have any forms setup yet, how about creating one now?";
+          }
+        });
+      }
 
-        //Default for canManageForms is false
-        //Need a record in security to ensure user has access to edit/create forms
-        vm.userCanManageForms = false;
+      vm.getLicenses = function (config) {
 
-        //Get Current User - To Check if the user Type is Admin
-        userService.getCurrentUser().then(function (response) {
-            vm.currentUser = response;
-            vm.isAdminUser = response.userGroups.includes("admin");
+        vm.loginError = false;
+        vm.hasLicenses = undefined;
+        vm.isLoading = true;
 
-            securityResource.getByUserId(vm.currentUser.id).then(function (response) {
-                vm.userCanManageForms = response.data.userSecurity.manageForms;
-            });
+        licensingResource.getAvailableLicenses(config).then(function (response) {
+          var licenses = response.data;
+          var currentDomain = window.location.hostname;
+
+          vm.hasLicenses = licenses.length > 0;
+          _.each(licenses, function (lic) {
+            if (lic.bindings && lic.bindings.indexOf(currentDomain) >= 0) {
+              lic.currentDomainMatch = true;
+            }
+          });
+
+          vm.configuredLicenses = _.sortBy(_.filter(licenses, function (license) { return license.configured; }), 'currentDomainMatch');
+          vm.openLicenses = _.filter(licenses, function (license) { return license.configured === false; });
+          vm.isLoading = false;
+
+        }, function (err) {
+          vm.loginError = true;
+          vm.hasLicenses = undefined;
+          vm.isLoading = false;
         });
 
-        //if not initial install, but still do not have forms - display a message
-        if (!vm.overlay.show) {
+      };
 
-            //Check if we have any forms created yet - by chekcing number of items back from JSON response
-            formResource.getOverView().then(function (response) {
-                if (response.data.length === 0) {
-                    vm.overlay.show = true;
-                    vm.overlay.title = "Create a form";
-                    vm.overlay.description = "You do not have any forms setup yet, how about creating one now?";
-                }
-            });
+
+      vm.configure = function (config) {
+        vm.isLoading = true;
+        licensingResource.configureLicense(config).then(function (response) {
+          vm.configuredLicenses.length = 0;
+          vm.openLicenses.length = 0;
+          vm.loadStatus();
+          notificationsService.success("License configured", "Umbraco forms have been configured to be used on this website");
+        });
+      };
+
+
+      vm.loadStatus = function () {
+        licensingResource.getLicenseStatus().then(function (response) {
+          vm.status = response.data;
+          vm.isLoading = false;
+        });
+
+        updatesResource.getUpdateStatus().then(function (response) {
+          vm.version = response.data;
+        });
+
+        updatesResource.getVersion().then(function (response) {
+          vm.currentVersion = response.data;
+        });
+
+        updatesResource.getSavePlainTextPasswordsConfiguration().then(function (response) {
+          vm.savePlainTextPasswords = response.data.toString() === "true";
+        });
+
+
+      };
+
+      //TODO: Can this die/go away?!
+      vm.upgrade = function () {
+        //Let's tripple check the user is of the userType Admin
+        if (!$scope.isAdminUser) {
+          //The user is not an admin & should have not hit this method but if they hack the UI they could potnetially see the UI perhaps?
+          notificationsService.error("Insufficient Permissions", "Only Admin users have the ability to upgrade Umbraco Forms");
+          return;
         }
 
-        vm.getLicenses = function (config) {
-
-            vm.loginError = false;
-            vm.hasLicenses = undefined;
-            vm.isLoading = true;
-
-            licensingResource.getAvailableLicenses(config).then(function (response) {
-                var licenses = response.data;
-                var currentDomain = window.location.hostname;
-
-                vm.hasLicenses = licenses.length > 0;
-                _.each(licenses, function (lic) {
-                    if (lic.bindings && lic.bindings.indexOf(currentDomain) >= 0) {
-                        lic.currentDomainMatch = true;
-                    }
-                });
-
-                vm.configuredLicenses = _.sortBy(_.filter(licenses, function (license) { return license.configured; }), 'currentDomainMatch');
-                vm.openLicenses = _.filter(licenses, function(license) { return license.configured === false; });
-                vm.isLoading = false;
-
-            }, function (err) {
-                vm.loginError = true;
-                vm.hasLicenses = undefined;
-                vm.isLoading = false;
-            });
-
-        };
-
-
-        vm.configure = function (config) {
-            vm.isLoading = true;
-            licensingResource.configureLicense(config).then(function (response) {
-                vm.configuredLicenses.length = 0;
-                vm.openLicenses.length = 0;
-                vm.loadStatus();
-                notificationsService.success("License configured", "Umbraco forms have been configured to be used on this website");
-            });
-        };
-
-
-        vm.loadStatus = function () {
-            licensingResource.getLicenseStatus().then(function (response) {
-                vm.status = response.data;
-                vm.isLoading = false;
-            });
-
-            updatesResource.getUpdateStatus().then(function (response) {
-                vm.version = response.data;
-            });
-
-            updatesResource.getVersion().then(function (response) {
-                vm.currentVersion = response.data;
-            });
-
-            updatesResource.getSavePlainTextPasswordsConfiguration().then(function (response) {
-                vm.savePlainTextPasswords = response.data.toString() === "true";
-            });
-
-
-        };
-
-        //TODO: Can this die/go away?!
-        vm.upgrade = function () {
-            //Let's tripple check the user is of the userType Admin
-            if (!$scope.isAdminUser) {
-                //The user is not an admin & should have not hit this method but if they hack the UI they could potnetially see the UI perhaps?
-                notificationsService.error("Insufficient Permissions", "Only Admin users have the ability to upgrade Umbraco Forms");
-                return;
-            }
-
-            vm.installing = true;
-            updatesResource.installLatest($scope.version.remoteVersion).then(function (response) {
-                window.location.reload();
-            }, function (reason) {
-                //Most likely the 403 Unauthorised back from server side
-                //The error is caught already & shows a notification so need to do it here
-                //But stop the loading bar from spining forever
-                vm.installing = false;
-            });
-        };
-
-
-        vm.create = function () {
-
-            //Let's tripple check the user is of the userType Admin
-            if (!vm.userCanManageForms) {
-                //The user is not an admin & should have not hit this method but if they hack the UI they could potnetially see the UI perhaps?
-                notificationsService.error("Insufficient Permissions", "You do not have permissions to create & manage forms");
-                return;
-            }
-
-            $location.url("forms/form/edit/-1?template=&create=true");
-        };
-
-
-        vm.configuration = { domain: window.location.hostname };
-        vm.loadStatus();
-
-
-        /////////////////////
-
-        vm.formsLimit = 4; //Show top 4 by default
-
-        vm.showAllOverviews = function(){
-            vm.formsLimit = 500; //TODO: Can this work if we set to null/undefinied or some kind of max?!
-        };
-
-        //Get all forms overviews (number of entries)
-        formResource.getOverView().then(function(response){
-            vm.forms = response.data;
-
-            _.each(vm.forms, function(form){
-                var filter = { form: form.id };
-
-                recordResource.getRecordsCount(filter).then(function(response){
-                    form.entries = response.data.count;
-                });
-            });
+        vm.installing = true;
+        updatesResource.installLatest($scope.version.remoteVersion).then(function (response) {
+          window.location.reload();
+        }, function (reason) {
+          //Most likely the 403 Unauthorised back from server side
+          //The error is caught already & shows a notification so need to do it here
+          //But stop the loading bar from spining forever
+          vm.installing = false;
         });
+      };
+
+
+      vm.create = function () {
+
+        //Let's tripple check the user is of the userType Admin
+        if (!vm.userCanManageForms) {
+          //The user is not an admin & should have not hit this method but if they hack the UI they could potnetially see the UI perhaps?
+          notificationsService.error("Insufficient Permissions", "You do not have permissions to create & manage forms");
+          return;
+        }
+
+        $location.url("forms/form/edit/-1?template=&create=true");
+      };
+
+
+      vm.configuration = { domain: window.location.hostname };
+      vm.loadStatus();
+
+
+      /////////////////////
+
+      vm.initialFormsLimit = 4;
+      vm.formsLimit = 4; //Show top 4 by default
+
+      vm.showMore = function () {
+        var incrementLimitBy = 8;
+        vm.formsLimit = vm.formsLimit + incrementLimitBy;
+        getRecordCounts();
+      };
+
+      function getRecordCounts() {
+        _.each(vm.forms, function (form, index) {
+
+          // Only get record counts for forms that are a) visible and b) already populated.
+          if (index >= vm.formsLimit || form.gotEntries) {
+            return;
+          }
+
+          var filter = { form: form.id };
+
+          recordResource.getRecordsCount(filter).then(function (response) {
+            form.entries = response.data.count;
+            form.gotEntries = true;
+          });
+        });
+      }
+
+      // Get all forms and populate visible ones with recorcd counts.
+      formResource.getOverView().then(function (response) {
+        vm.forms = response.data;
+        getRecordCounts();
+      });
 
     });
 
@@ -869,29 +906,35 @@ angular.module("umbraco")
             }
         }
 	});
-angular.module("umbraco").controller("UmbracoForms.Editors.Form.CopyController",function ($scope, formResource, navigationService) {
+angular.module("umbraco").controller("UmbracoForms.Editors.Form.CopyController", function ($scope, formResource, navigationService) {
 
-	    //Copy Function run from button on click
-	    $scope.copyForm = function (formId) {
+  $scope.copiedForm = {
+    name: '',
+    copyWorkflows: false
+  };
 
-	        //Perform copy in formResource
-	        formResource.copy(formId, $scope.newFormName).then(function (response) {
+  //Copy Function run from button on click
+  $scope.copyForm = function (formId) {
 
-	            var newFormId = response.data.id;
+    //Perform copy in formResource
+    formResource.copy(formId, $scope.copiedForm.name, $scope.copiedForm.copyWorkflows).then(function (response) {
 
-	            //Reload the tree (but do NOT mark the new item in the tree as selected/active)
-	            navigationService.syncTree({ tree: "form", path: ["-1", String(newFormId)], forceReload: true, activate: false });
+      var newFormId = response.data.id;
 
-	            //Once 200 OK then reload tree & hide copy dialog navigation
-	            navigationService.hideNavigation();
-	        });
-	    };
+      //Reload the tree (but do NOT mark the new item in the tree as selected/active)
+      navigationService.syncTree({ tree: "form", path: ["-1", String(newFormId)], forceReload: true, activate: false });
 
-        //Cancel button - closes dialog
-        $scope.cancelCopy = function() {
-            navigationService.hideNavigation();
-        }
-	});
+      //Once 200 OK then reload tree & hide copy dialog navigation
+      navigationService.hideNavigation();
+    });
+  };
+
+  //Cancel button - closes dialog
+  $scope.cancelCopy = function () {
+    navigationService.hideNavigation();
+  }
+});
+
 angular.module("umbraco").controller("UmbracoForms.Editors.Form.CreateController", function ($scope, $location, formResource, navigationService) {
   formResource.getAllTemplates().then(function (response) {
     $scope.formTemplates = response.data;
@@ -1152,161 +1195,6 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EditController",
 
 
     });
-
-// angular.module("umbraco").controller("UmbracoForms.Editors.Form.EditLegacyController",
-//
-// function ($scope, $routeParams, formResource, editorState, dialogService, formService, notificationsService, contentEditingHelper, formHelper, navigationService, userService, securityResource) {
-//
-//     //On load/init of 'editing' a form then
-//     //Let's check & get the current user's form security
-//     var currentUserId = null;
-//     var currentFormSecurity = null;
-//
-//     //By default set to have access (in case we do not find the current user's per indivudal form security item)
-//     $scope.hasAccessToCurrentForm = true;
-//
-//     userService.getCurrentUser().then(function (response) {
-//         currentUserId = response.id;
-//
-//         //Now we can make a call to form securityResource
-//         securityResource.getByUserId(currentUserId).then(function (response) {
-//             $scope.security = response.data;
-//
-//             //Use _underscore.js to find a single item in the JSON array formsSecurity
-//             //where the FORM guid matches the one we are currently editing (if underscore does not find an item it returns an empty array)
-//             //As _.findWhere not in Umb .1.6 using _.where() that lists multiple matches - checking that we have only item in the array (ie one match)
-//             currentFormSecurity = _.where(response.data.formsSecurity, { Form: $routeParams.id });
-//
-//             if (currentFormSecurity.length === 1) {
-//                 //Check & set if we have access to the form
-//                 //if we have no entry in the JSON array by default its set to true (so won't prevent)
-//                 $scope.hasAccessToCurrentForm = currentFormSecurity[0].HasAccess;
-//             }
-//
-//             //Check if we have access to current form OR manage forms has been disabled
-//             if (!$scope.hasAccessToCurrentForm || !$scope.security.userSecurity.manageForms) {
-//
-//                 //Show error notification
-//                 notificationsService.error("Access Denied", "You do not have access to edit this form");
-//
-//
-//                 //Resync tree so that it's removed & hides
-//                 navigationService.syncTree({ tree: "form", path: ['-1'], forceReload: true, activate: false }).then(function(response) {
-//
-//                     //Response object contains node object & activate bool
-//                     //Can then reload the root node -1 for this tree 'Forms Folder'
-//                     navigationService.reloadNode(response.node);
-//                 });
-//
-//                 //Don't need to wire anything else up
-//                 return;
-//             }
-//         });
-//     });
-//
-//
-//     if ($routeParams.create) {
-//
-// 		//we are creating so get an empty data type item
-// 	    formResource.getScaffold($routeParams.template)
-// 	        .then(function(response) {
-// 	            $scope.form = response.data;
-// 				$scope.currentPage = {};
-//
-// 	            formResource.getPrevalueSources()
-// 	                .then(function(resp){
-// 	                    $scope.prevaluesources = resp.data;
-// 	            });
-//
-// 				formResource.getAllFieldTypesWithSettings()
-// 					.then(function (resp) {
-// 						$scope.fieldtypes = resp.data;
-// 						$scope.ready = true;
-// 					});
-//
-// 				//set a shared state
-// 				editorState.set($scope.form);
-// 			});
-//
-//     } else {
-//
-// 		$scope.workflowsUrl = "#/forms/form/workflows/" +$routeParams.id;
-// 		$scope.entriesUrl = "#/forms/form/entries/" +$routeParams.id;
-//
-//
-// 		//we are editing so get the content item from the server
-// 		formResource.getByGuid($routeParams.id)
-// 			.then(function (response) {
-//
-// 			    //As we are editing an item we can highlight it in the tree
-// 			    navigationService.syncTree({ tree: "form", path: [String($routeParams.id)], forceReload: false });
-//
-//
-// 				$scope.form = response.data;
-// 				$scope.saved = true;
-//
-// 				formResource.getPrevalueSources()
-// 	                .then(function (resp) {
-// 	                    $scope.prevaluesources = resp.data;
-// 	                });
-//
-// 				formResource.getAllFieldTypesWithSettings()
-// 					.then(function (resp) {
-// 						$scope.fieldtypes = resp.data;
-// 						$scope.ready = true;
-// 					});
-//
-// 				//set a shared state
-// 				editorState.set($scope.form);
-// 			});
-//
-//
-// 	}
-//
-// 	$scope.editForm = function(form, section){
-// 		dialogService.open(
-// 			{
-// 				template: "/app_plugins/UmbracoForms/Backoffice/Form/dialogs/formsettings.html",
-// 				form: form,
-// 				section: section,
-// 				page: $scope.currentPage
-// 			});
-// 	};
-//
-// 	$scope.save = function(){
-//
-// 	    if (formHelper.submitForm({ scope: $scope })) {
-// 	        //make sure we set correct widths on all containers
-// 	        formService.syncContainerWidths($scope.form);
-//
-// 	        formResource.save($scope.form).then(function (response) {
-//
-// 	            formHelper.resetForm({ scope: $scope });
-//
-// 	            contentEditingHelper.handleSuccessfulSave({
-// 	                scope: $scope,
-// 	                savedContent: response.data
-// 	            });
-//
-// 	            $scope.ready = true;
-// 	            //$scope.form = response.data;
-//
-// 	            //set a shared state
-// 	            editorState.set($scope.form);
-//
-// 	            navigationService.syncTree({ tree: "form", path: [String($scope.form.id)], forceReload: true });
-//
-// 	            notificationsService.success("Form saved", "");
-//
-// 	        }, function (err) {
-// 	            notificationsService.error("Form Failed to save", err.data.Message);
-// 	        });
-// 	    }
-//
-// 	};
-//
-//
-// });
 
 angular.module("umbraco").controller("UmbracoForms.Editors.Form.EntriesController", function ($scope, $routeParams, recordResource, formResource, editorService, userService, securityResource, notificationsService, navigationService, overlayService) {
 
@@ -1923,184 +1811,6 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EntriesSettingsC
 
     });
 
-// angular.module("umbraco").controller("UmbracoForms.Editors.Form.Dialogs.FieldsetSettingController",
-// 	function ($scope, formService, dialogService) {
-//
-// 	    $scope.deleteConditionRule = function(rules, rule) {
-// 	        formService.deleteConditionRule(rules, rule);
-// 	    };
-//
-// 	    $scope.addConditionRule = function (condition) {
-// 	        formService.addConditionRule(condition);
-// 	    };
-//
-//         $scope.close = function() {
-//             dialogService.closeAll();
-//         }
-// 	}
-// );
-
-// angular.module("umbraco").controller("UmbracoForms.Editors.Form.Dialogs.FieldSettingController",
-// 	function ($scope, formService, dialogService) {
-//
-// 	    $scope.deleteConditionRule = function(rules, rule) {
-// 	        formService.deleteConditionRule(rules, rule);
-// 	    };
-//
-// 	    $scope.addConditionRule = function (condition) {
-// 	        formService.addConditionRule(condition);
-// 	    };
-//
-// 	    $scope.getPrevalues = function (field) {
-//	        
-// 	        formService.loadFieldTypePrevalues(field);
-//
-// 	    };
-//
-//         $scope.close = function() {
-//            
-//             $scope.dialogOptions.field.settings = {};
-//             angular.forEach($scope.dialogOptions.field.$fieldType.settings, function (setting) {
-//                 var key = setting.alias;
-//                 var value = setting.value;
-//                 $scope.dialogOptions.field.settings[key] = value;
-//                 dialogService.closeAll();
-//             });
-//         }
-// 	});
-
-// angular.module("umbraco").controller("UmbracoForms.Editors.Form.Dialogs.WorkflowsController",
-// 	function ($scope, $routeParams, workflowResource, dialogService, notificationsService, $window) {
-//
-// 	    if ($scope.dialogData.workflow) {
-// 	        //edit exisiting workflow
-// 	        $scope.workflow = $scope.dialogData.workflow;
-// 	        workflowResource.getAllWorkflowTypesWithSettings()
-// 	            .then(function (resp) {
-// 	                $scope.types = resp.data;
-// 	                setTypeAndSettings();
-// 	            });
-//
-// 	    } else {
-// 	        //creating a new workflow
-// 	        workflowResource.getScaffold()
-// 	            .then(function(response) {
-// 	                $scope.loaded = true;
-// 	                $scope.workflow = response.data;
-// 	                $scope.workflow.executesOn = $scope.dialogData.state;
-// 	                $scope.workflow.form = $scope.dialogData.form;
-// 	                $scope.workflow.active = true;
-//
-// 					//Pull through the new sortOrder that this item should be given
-// 					//As we save the item/JSON down to disk when we save the item in this dialog
-// 					$scope.workflow.sortOrder = $scope.dialogData.newSortOrder;
-//
-// 	                workflowResource.getAllWorkflowTypesWithSettings()
-// 	                    .then(function(resp) {
-// 	                        $scope.types = resp.data;
-//
-// 	                    });
-//
-// 	            });
-// 	    }
-//
-//
-// 	    $scope.setType = function () {
-// 	        setTypeAndSettings();
-// 	    };
-//
-// 	    $scope.close = function () {
-//	       
-// 	        dialogService.closeAll();
-// 	    };
-//
-// 	    $scope.add = function () {
-//	       
-// 	        save();
-//	        
-// 	    };
-//
-// 	    $scope.update = function () {
-//	       
-// 	        save();
-//	        
-// 	    };
-//
-//         $scope.delete = function() {
-//             var deleteWorkflow = $window.confirm('Are you sure you want to delete the workflow?');
-//
-//             if (deleteWorkflow) {
-//                 workflowResource.deleteByGuid($scope.workflow.id).then(function () {
-//                     $scope.dialogOptions.workflows.splice($scope.dialogOptions.workflows.indexOf($scope.workflow), 1);
-//
-//                     notificationsService.success("Workflow deleted", "");
-//                     //$scope.submit($scope.workflow);
-//                     dialogService.closeAll();
-//
-//                 });
-//             }
-//         }
-//
-// 	    var save = function() {
-// 	        //set settings
-// 	        $scope.workflow.settings = {};
-// 	        angular.forEach($scope.workflow.$type.settings, function (setting) {
-// 	            var key = setting.alias;
-// 	            var value = setting.value;
-// 	            $scope.workflow.settings[key] = value;
-// 	        });
-// 	        //validate settings
-// 	        workflowResource.validateSettings($scope.workflow)
-//                 .then(function (response) {
-//
-//                     $scope.errors = response.data;
-//
-//                     if ($scope.errors.length > 0) {
-//                         angular.forEach($scope.errors, function (error) {
-//
-//                             notificationsService.error("Workflow failed to save", error.Message);
-//                         });
-//                     } else {
-//                         //save
-//                         workflowResource.save($scope.workflow)
-//                         .then(function (response) {
-//
-//                             $scope.workflow = response.data;
-//                           
-//                             setTypeAndSettings();
-//                           
-//                             notificationsService.success("Workflow saved", "");
-//                             $scope.submit($scope.workflow);
-//                             dialogService.closeAll();
-//
-//                         }, function (err) {
-//                             notificationsService.error("Workflow failed to save", "");
-//                         });
-//                     }
-//
-//                 }, function (err) {
-//                     notificationsService.error("Workflow failed to save", "Please check if your settings are valid");
-//                 });
-// 	    };
-//
-// 	    var setTypeAndSettings = function () {
-// 	        $scope.workflow.$type = _.where($scope.types, { id: $scope.workflow.workflowTypeId })[0];
-// 	        if (!$scope.workflow.name) {
-// 	            $scope.workflow.name = $scope.workflow.$type.name;
-// 	        }
-// 	        //set settings
-// 	        angular.forEach($scope.workflow.settings, function (setting) {
-// 	            for (var key in $scope.workflow.settings) {
-// 	                if ($scope.workflow.settings.hasOwnProperty(key)) {
-// 	                    if (_.where($scope.workflow.$type.settings, { alias: key }).length > 0) {
-// 	                        _.where($scope.workflow.$type.settings, { alias: key })[0].value = $scope.workflow.settings[key];
-// 	                    }
-//
-// 	                }
-// 	            }
-// 	        });
-// 	    };
-// 	});
 /**
  * @ngdoc controller
  * @name UmbracoForms.Overlays.FieldsetSettingsOverlay
@@ -3752,8 +3462,8 @@ function formResource($http) {
             return $http.get(apiRoot + "GetPrevalueSources");
         },
 
-        copy: function(id, newFormName) {
-            return $http.post(apiRoot + "CopyForm", { guid: id, newName: newFormName });
+        copy: function(id, newFormName, copyWorkflows) {
+            return $http.post(apiRoot + "CopyForm", { guid: id, newName: newFormName, copyWorkflows: copyWorkflows });
         }
     };
 }
@@ -4174,60 +3884,44 @@ angular.module("umbraco.directives")
     };
 });
 
-angular.module("umbraco.directives").directive('umbFormsDateRangePicker', function (assetsService, userService) {
-    return {
-        restrict: 'A',
-        scope: {
-            userLocale: "@",
-            onChange: "="
-        },
-        template: '<div class="umb-forms-date-range-picker daterange daterange--double"></div>',
-        link: function (scope, element) {
+angular.module("umbraco.directives").directive('umbFormsDateRangePicker', function (assetsService) {
+  return {
+    restrict: 'A',
+    scope: {
+      userLocale: "@",
+      onChange: "="
+    },
+    template: '<div class="umb-forms-date-range-picker daterange daterange--double"></div>',
+    link: function (scope, element) {
+      assetsService.load([
+        "~/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js",
+        "~/App_Plugins/UmbracoForms/Assets/BaremetricsCalendar/public/js/calendar.js"
+      ]).then(function () {
+        new Calendar({
+          element: element.firstChild,
+          earliest_date: '2000-01-01',
+          latest_date: moment(),
+          start_date: moment().subtract(29, 'days'),
+          end_date: moment(),
+          same_day_range: true,
+          callback: function () {
+            // Date update/changed
+            var dateFilter = {
+              startDate: moment(this.start_date).format('YYYY-MM-DD'),
+              endDate: moment(this.end_date).format('YYYY-MM-DD')
+            };
 
-            assetsService.load([
-                "/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js",
-                "/App_Plugins/UmbracoForms/Assets/BaremetricsCalendar/public/js/calendar.js"
-            ])
-            .then(function () {
+            if (scope.onChange) {
+              scope.onChange(dateFilter);
+            }
+          }
+        });
+      });
 
-                //Set the moment locale to the current user's locale
-                //Used for display, we still grab the date as YYYY-MM-DD to send to API endpoint
-                moment.locale(scope.userLocale);
-
-                var dd = new Calendar({
-                    element: $(".daterange--double"),
-                    earliest_date: 'January 1, 2000',
-                    latest_date: moment(),
-                    start_date: moment().subtract(29, 'days'),
-                    end_date: moment(),
-                    same_day_range: true,
-                    callback: function () {
-
-                        //Date update/changed
-
-                        //Parse the dates from this component to Moment dates
-                        var start = moment(this.start_date);
-                        var end = moment(this.end_date);
-                        var dateFilter = {};
-
-                        dateFilter.startDate = start.format('YYYY-MM-DD');
-                        dateFilter.endDate = end.format('YYYY-MM-DD');
-
-                        if(scope.onChange) {
-                            scope.onChange(dateFilter);
-                        }
-
-                    }
-                });
-
-            });
-
-            //Load CSS as dependancy
-            //load the seperate css for the editor to avoid it blocking our js loading
-            assetsService.loadCss("/App_Plugins/UmbracoForms/Assets/BaremetricsCalendar/public/css/application.css");
-
-        }
-    };
+      // Load CSS as dependancy (load the seperate CSS for the editor to avoid it blocking our JS loading)
+      assetsService.loadCss("/App_Plugins/UmbracoForms/Assets/BaremetricsCalendar/public/css/application.css");
+    }
+  };
 });
 
 angular.module("umbraco.directives")
@@ -4915,89 +4609,6 @@ angular.module("umbraco.directives")
             }
         };
     });
-// angular.module("umbraco.directives")
-//     .directive('umbFormsLegacyContentPicker', function (dialogService, entityResource, iconHelper) {
-//     return {
-//         restrict: 'E',
-//         replace: true,
-//         templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-legacy-content-picker.html',
-//         require: "ngModel",
-//         link: function (scope, element, attr, ctrl) {
-//
-//             ctrl.$render = function() {
-//                 var val = parseInt(ctrl.$viewValue);
-//
-//                 if (!isNaN(val) && angular.isNumber(val) && val > 0) {
-//
-//                     entityResource.getById(val, "Document").then(function(item) {
-//                         item.icon = iconHelper.convertFromLegacyIcon(item.icon);
-//                         scope.node = item;
-//                     });
-//                 }
-//             };
-//
-//             scope.openContentPicker = function () {
-//                 var d = dialogService.treePicker({
-//                     section: "content",
-//                     treeAlias: "content",
-//                     multiPicker: false,
-//                     callback: populate
-//                 });
-//             };
-//
-//             scope.clear = function () {
-//                 scope.id = undefined;
-//                 scope.node = undefined;
-//                 updateModel(0);
-//             };
-//
-//             function populate(item) {
-//                 scope.clear();
-//                 item.icon = iconHelper.convertFromLegacyIcon(item.icon);
-//                 scope.node = item;
-//                 scope.id = item.id;
-//                 updateModel(item.id);
-//             }
-//
-//             function updateModel(id) {
-//                 ctrl.$setViewValue(id);
-//                
-//             }
-//         }
-//     };
-// });
-
-// angular.module("umbraco.directives")
-//     .directive('umbFormsOverlay', function () {
-//         return {
-//             restrict: 'A',
-//             link: function (scope, el, attrs, ctrl) {
-//                 var margin = 50,
-//                 winHeight = $(window).height(),
-//                
-//                 calculate = _.throttle(function(){
-//                     if(el){
-//                         //detect bottom fold
-//                         var bottom_dif = (el.offset().top + el.height() + margin) - winHeight;
-//                         if(bottom_dif > 0){
-//
-//                             $(el).css('margin-top', function (index, curValue) {
-//                                 return parseInt(curValue, 10) - bottom_dif + 'px';
-//                             });
-//                         }else{
-//                             //else detect top fold           
-//                         }
-//                     }
-//                 }, 1000);
-//
-//                 //On resize, make sure to check the overlay
-//                 $(window).bind("resize", function () {
-//                    winHeight = $(window).height();
-//                    calculate();
-//                 });
-//             }
-//         };
-//     });
 angular.module("umbraco.directives")
   .directive('umbFormsPrevalueEditor', function (notificationsService) {
     return {

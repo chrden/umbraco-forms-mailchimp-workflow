@@ -1,1 +1,3 @@
-<input type="number" min="{{setting.prevalues[0]}}" max="{{setting.prevalues[1]}}" ng-model="setting.value" />
+<div ng-controller="UmbracoForms.SettingTypes.NumericFieldController as vm">
+  <input type="number" min="{{vm.min}}" max="{{vm.max}}" ng-model="vm.value" ng-change="vm.change()" />
+</div>

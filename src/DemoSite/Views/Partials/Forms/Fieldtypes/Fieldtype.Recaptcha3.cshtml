@@ -1,7 +1,10 @@
 @using Umbraco.Forms.Mvc
+@using Umbraco.Web.Composing
 @model Umbraco.Forms.Mvc.Models.FieldViewModel
 @{
-    var siteKey = Umbraco.Forms.Core.Configuration.GetSetting("RecaptchaV3SiteKey");
+    var configuration = Current.Factory.GetInstance<Umbraco.Forms.Core.IFacadeConfiguration>();
+    var siteKey = configuration.GetSetting("RecaptchaV3SiteKey");
+
     if (!string.IsNullOrEmpty(siteKey))
     {
         @* Google JS reCAPTHA API *@
@@ -11,30 +14,30 @@
         <input type="hidden" id="@Model.Id" name="g-recaptcha-response" />
 
         <script>
-            var hiddenField = document.getElementById("@Model.Id");
-            var timerFunction = function() {
-                grecaptcha.execute('@siteKey', { action: 'umbracoform_submit' }).then(function (token) {
-                    // Enable the submit button now we have a token
-                    hiddenField.form.querySelector('[type=submit]').removeAttribute('disabled');
-                    hiddenField.value = token;
+            (function (window, document) {
+                var hiddenField = document.getElementById('@Model.Id');
+                var timerFunction = function () {
+                    window.grecaptcha.execute('@siteKey', { action: 'umbracoform_submit' }).then(function (token) {
+                        // Enable the submit button now we have a token
+                        hiddenField.form.querySelector('[type=submit]').removeAttribute('disabled');
+                        hiddenField.value = token;
+                    });
+                    setTimeout(timerFunction, 60*1000);
+                };
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Disable the submit button for this form, until we actually have a key from Google reCAPTCHA
+                    hiddenField.form.querySelector('[type=submit]').setAttribute('disabled','disabled');
+
+                    window.grecaptcha.ready(function () {
+                        timerFunction();
+                    });
                 });
-                setTimeout(timerFunction, 60*1000);
-            };
-
-
-            document.addEventListener("DOMContentLoaded", function () {
-                // Disable the submit button for this form, until we actually have a key from Google reCAPTCHA
-                hiddenField.form.querySelector('[type=submit]').setAttribute('disabled','disabled');
-
-                grecaptcha.ready(function () {
-                    timerFunction();
-                });
-            });
-
+            })(window, document);
         </script>
     }
     else
     {
-        <p class="error">ERROR: ReCaptcha v3 is missing the Site Key - Please update the web.config to include 'key="RecaptchaV3SiteKey"'</p>
+        <p class="error">ERROR: reCAPTCHA v3 is missing the Site Key - Please update the UmbracoForms.config file to include 'key="RecaptchaV3SiteKey"'</p>
     }
 }

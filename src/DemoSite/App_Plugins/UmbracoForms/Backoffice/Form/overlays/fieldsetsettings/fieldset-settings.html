@@ -86,7 +86,10 @@
                                     </a>
                                 </div>
                             </div>
-                            <button class="umb-forms-button" ng-click="vm.addColumn()" ng-disabled="!vm.canAddColumn()">
+                            <button class="umb-forms-button"
+                                    ng-class="{'-disabled': !vm.canAddColumn()}"
+                                    ng-click="vm.addColumn()"
+                                    ng-disabled="!vm.canAddColumn()">
                                 Add column
                             </button>
                         </div>

@@ -239,6 +239,11 @@ select.-full-width {
   padding: 20% 4px;
   height: 80px;
 }
+textarea.-full-width-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+}
 .entries-table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -1845,6 +1850,13 @@ a.umb-forms-workflow-preview__item--inactive:hover {
 .umb-forms-button.-simple:hover,
 .umb-forms-button.-simple:active {
   color: #2e8aea;
+}
+.umb-forms-button.-disabled,
+.umb-forms-button.-disabled:hover,
+.umb-forms-button.-disabled:active {
+  background-color: #f3f3f5;
+  border: 1px solid #a2a1a6;
+  cursor: default;
 }
 .umb-forms__select {
   position: relative;
