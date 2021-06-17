@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
-  <area alias="mapButton">
-    <key alias="defaultLabel">Add field mapping</key>
-    <key alias="secondaryLabel">Add static mapping</key>
-  </area>
-</language>

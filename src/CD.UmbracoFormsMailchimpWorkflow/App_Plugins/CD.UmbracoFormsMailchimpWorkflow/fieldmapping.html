@@ -2,7 +2,9 @@
     <umb-load-indicator ng-if="model.loading"></umb-load-indicator>
     <div class="control-row -margin-bottom" ng-if="!model.loading">
         <div class="umb-forms-mapping-header">
-            <div class="umb-forms-mapping-field -no-margin-left">Select Mailchimp list</div>
+            <div class="umb-forms-mapping-field -no-margin-left">
+                <localize key="headings_selectMailchimpList">Select a Mailchimp list</localize>
+            </div>
         </div>
         <select ng-model="model.listId" ng-options="list.Id as list.Name for list in model.lists" ng-change="getListFields()">
             <option value="">Select a Mailchimp list</option>
@@ -10,21 +12,28 @@
     </div>
     <div ng-if="!model.loading && model.error">
         <small class="text-error">
-            There was an error retrieving the lists from Mailchimp.<br/>
-            Please check your API key is configured correctly.
+            <localize key="error_lists">
+                There was an error retrieving the lists from Mailchimp.
+            </localize><br />
+            <localize key="error_apiKey">
+                Please check your API key is configured correctly.
+            </localize>
         </small>
     </div>
-    <div class="control-row" ng-if="!model.loading">
+    <div class="control-row" ng-if="!model.loading && !model.error">
         <div class="umb-forms-mappings" ng-if="model.fieldMappings.length > 0">
 
             <div class="umb-forms-mapping-header">
-                <div class="umb-forms-mapping-field -no-margin-left">Form field/static value</div>
-                <div class="umb-forms-mapping-field">Mailchimp list field</div>
+                <div class="umb-forms-mapping-field -no-margin-left">
+                    <localize key="headings_formFieldOrStatic">Form field/static value</localize>
+                </div>
+                <div class="umb-forms-mapping-field">
+                    <localize key="headings_mailchimpListField">Mailchimp list field</localize>
+                </div>
                 <div class="umb-forms-mapping-remove -no-margin-right"></div>
             </div>
 
             <div class="umb-forms-mapping" ng-repeat="fieldMapping in model.fieldMappings">
-
                 <div class="umb-forms-mapping-field -no-margin-left" ng-if="!fieldMapping.isStatic">
                     <select ng-model="fieldMapping.formFieldAlias" ng-options="formField.alias as formField.caption for formField in model.fields" ng-change="saveMapping()" class="-full-width">
                     </select>
