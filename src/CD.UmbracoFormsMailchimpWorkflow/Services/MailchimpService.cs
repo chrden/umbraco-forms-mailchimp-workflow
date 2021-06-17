@@ -1,6 +1,6 @@
 ﻿using CD.UmbracoFormsMailchimpWorkflow.Models.Api.Request;
 using CD.UmbracoFormsMailchimpWorkflow.Models.Api.Response;
-using CD.UmbracoFormsMailchimpWorkflow.Models.Dto.Mailchimp;
+using CD.UmbracoFormsMailchimpWorkflow.Models.Dto;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -36,9 +36,9 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
 
         public IEnumerable<List> GetMailchimpLists()
         {
-            using (var client = GetMailchimpClient())
+            try
             {
-                try
+                using (var client = GetMailchimpClient())
                 {
                     var response = client.GetStringAsync(string.Concat(MailchimpBaseAddress, "/lists")).Result;
 
@@ -54,20 +54,20 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
                         );
                     }
                 }
-                catch (Exception ex)
-                {
-                    logger.Error<MailchimpService>(ex);
-                }
-
-                return null;
             }
+            catch (Exception ex)
+            {
+                logger.Error<MailchimpService>(ex);
+            }
+
+            return null;
         }
 
         public IEnumerable<MergeField> GetMailchimpListMergeFields(string listId)
         {
-            using (var client = GetMailchimpClient())
+            try
             {
-                try
+                using (var client = GetMailchimpClient())
                 {
                     var mergeFields =
                         new List<MergeField>()
@@ -99,13 +99,13 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
 
                     return mergeFields;
                 }
-                catch (Exception ex)
-                {
-                    logger.Error<MailchimpService>(ex);
-                }
-
-                return null;
             }
+            catch (Exception ex)
+            {
+                logger.Error<MailchimpService>(ex);
+            }
+
+            return null;
         }
 
         #endregion
@@ -114,28 +114,38 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
 
         public bool AddSubscriberToList(string listId, string emailAddress, Dictionary<string, string> mergeFields)
         {
-            using (var client = GetMailchimpClient())
+            try
             {
-                var uri = string.Concat(MailchimpBaseAddress, "/lists/", listId, "/members");
+                using (var client = GetMailchimpClient())
+                {
+                    var uri = string.Concat(MailchimpBaseAddress, "/lists/", listId, "/members");
 
-                var requestObj =
-                    new MailchimpAddSubscriberRequest
+                    var requestObj =
+                        new MailchimpAddSubscriberRequest
+                        {
+                            EmailAddress = emailAddress,
+                            MergeFields = mergeFields
+                        };
+
+                    var response = client.PostAsJsonAsync(uri, requestObj).Result;
+
+                    if (response.IsSuccessStatusCode)
                     {
-                        EmailAddress = emailAddress,
-                        MergeFields = mergeFields
-                    };
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponseString = response.Content.ReadAsStringAsync();
+                        var error = JsonConvert.DeserializeObject<MailchimpErrorResponse>(errorResponseString.Result);
 
-                var response = client.PostAsJsonAsync(uri, requestObj).Result;
-
-                if(response.IsSuccessStatusCode)
-                {
-                    return true;
+                        logger.Error<MailchimpService>("Umbraco Forms Mailchimp Workflow error: {Title} ({Status}) - {ErrorMessage} ({InstanceId}). Mailchimp list id: {ListId}", error.Title, error.Status, error.Detail, error.Instance, listId);
+                    }
                 }
-                else
-                {
-                    logger.Error<MailchimpService>("Add subscriber to list with id {listId} failed.", listId);
-                }
-             }
+            }
+            catch (Exception ex)
+            {
+                logger.Error<MailchimpService>(ex);
+            }
 
             return false;
         }

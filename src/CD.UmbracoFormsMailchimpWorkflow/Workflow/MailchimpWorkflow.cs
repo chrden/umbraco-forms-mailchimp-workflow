@@ -20,7 +20,7 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Workflow
             get { return JsonConvert.DeserializeObject<FieldMapping>(FieldMapping); }
         }
 
-        [Setting("Field mapping", Alias = "fieldMapping", Description = "Map Umbraco Forms fields to the fields in a Mailchimp list", View = "~/App_Plugins/CD.UmbracoFormsMailchimpWorkflow/fieldmapping.html")]
+        [Setting("Field mapping", Alias = "fieldMapping", Description = "Map Umbraco Form fields to the fields in a Mailchimp list", View = "~/App_Plugins/CD.UmbracoFormsMailchimpWorkflow/fieldmapping.html")]
         public string FieldMapping { get; set; }
 
         public MailchimpWorkflow(IMailchimpService mailchimpService)
