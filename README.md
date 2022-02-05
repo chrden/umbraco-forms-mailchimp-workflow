@@ -1,4 +1,5 @@
 # Umbraco-Forms-Mailchimp-Workflow
 
 Umbraco credentials:
-P: kW6F8HPo$viu
+U: demo@user.com
+P: Ab1hoHu&b5hF
