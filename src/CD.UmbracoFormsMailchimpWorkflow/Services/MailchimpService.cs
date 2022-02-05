@@ -8,6 +8,8 @@ using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
+using System.Text;
 using Umbraco.Core.Logging;
 
 namespace CD.UmbracoFormsMailchimpWorkflow.Services
@@ -118,7 +120,8 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
             {
                 using (var client = GetMailchimpClient())
                 {
-                    var uri = string.Concat(MailchimpBaseAddress, "/lists/", listId, "/members");
+                    var subscriberHash = CreateMD5(emailAddress.ToLower());
+                    var uri = string.Concat(MailchimpBaseAddress, "/lists/", listId, "/members/", subscriberHash);
 
                     var requestObj =
                         new MailchimpAddSubscriberRequest
@@ -127,7 +130,7 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
                             MergeFields = mergeFields
                         };
 
-                    var response = client.PostAsJsonAsync(uri, requestObj).Result;
+                    var response = client.PutAsJsonAsync(uri, requestObj).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -158,6 +161,27 @@ namespace CD.UmbracoFormsMailchimpWorkflow.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", MailchimpApiKey);
 
             return client;
+        }
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/11454004/calculate-a-md5-hash-from-a-string?rq=1
+        /// </summary>
+        private string CreateMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (var md5 = MD5.Create())
+            {
+                var inputBytes = Encoding.ASCII.GetBytes(input);
+                var hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                var sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }
