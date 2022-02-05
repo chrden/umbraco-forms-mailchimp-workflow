@@ -1,6 +1,0 @@
-{
-    "IIS-Site-Name": "Umbraco Forms Mailchimp Workflow Demo",
-    "App-Pool-Name": "Umbraco Forms Mailchimp Workflow Demo",
-    "IIS-App-Pool-Dot-Net-Version": "v4.0",
-    "bindings": ["ufmw-demo.localtest.me"]
-}

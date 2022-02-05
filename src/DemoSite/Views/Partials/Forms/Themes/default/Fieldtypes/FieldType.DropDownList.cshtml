@@ -1,10 +1,11 @@
-@using Umbraco.Forms.Mvc
+@model Umbraco.Forms.Web.Models.FieldViewModel
 @using Umbraco.Forms.Web
-@model Umbraco.Forms.Mvc.Models.FieldViewModel
 @{
+    var settings = Model.AdditionalSettings;
     var autocompleteAttribute = Model.GetSettingValue<string>("AutocompleteAttribute", string.Empty);
-    var allowMultiple = Model.GetSettingValue<bool>("AllowMultipleSelections", false);
+    var allowMultiple = settings.ContainsKey("AllowMultipleSelections") && settings["AllowMultipleSelections"].ToLower() == "true";
 }
+
 <select class="@Html.GetFormFieldClass(Model.FieldTypeName)"
         name="@Model.Name"
         id="@Model.Id"
@@ -18,6 +19,6 @@
     }
     @foreach (var pv in Model.PreValues)
     {
-        <option value="@pv.Value" @if (Model.ContainsValue(pv.Value)) { <text> selected="selected" </text> }>@pv.Value</option>
+        @: <option value="@pv.Value" @(Model.ContainsValue(pv.Value) ? "selected" : string.Empty)>@pv.Value</option>
     }
 </select>

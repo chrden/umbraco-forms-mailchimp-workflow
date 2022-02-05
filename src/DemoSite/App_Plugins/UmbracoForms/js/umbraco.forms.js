@@ -75,7 +75,7 @@ angular.module("umbraco").controller("UmbracoForms.SettingTypes.EmailTemplatePic
 	    $scope.openTreePicker = function() {
 
 			var treePickerOverlay = {
-				treeAlias: "emailTemplates",
+				treeAlias: "EmailTemplates",
 				section:"forms",
 				entityType: "email-template",
 				multiPicker: false,
@@ -580,8 +580,6 @@ angular.module("umbraco")
 
       var vm = this;
 
-      vm.isLoading = true;
-
       vm.overlay = {
         show: false,
       };
@@ -733,7 +731,7 @@ angular.module("umbraco")
           return;
         }
 
-        $location.url("forms/form/edit/-1?template=&create=true");
+        $location.url("forms/Form/edit/-1?template=&create=true");
       };
 
 
@@ -748,8 +746,8 @@ angular.module("umbraco")
 
       vm.hasUnrestrictedLicense = function (status) {
         return status &&
-          status.licenseLimitations &&
-          status.licenseLimitations.includes("*not* associated with any ips or domains");
+          status.validDomains &&
+          status.validDomains.includes("*not* associated with any ips or domains");
       };
 
       vm.displayLicensedDomains = function (status) {
@@ -948,7 +946,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.DataSource.EditContro
 
     $scope.showWizard = function () {
       var dataSourcesSettings = {
-        view: "/app_plugins/UmbracoForms/Backoffice/Datasource/dialogs/wizard.html",
+        view: "/App_Plugins/UmbracoForms/backoffice/Datasource/dialogs/wizard.html",
         dataSourceId: $scope.dataSource.id,
         size: 'medium'
       };
@@ -1033,7 +1031,6 @@ angular.module("umbraco")
     function ($scope, formResource, navigationService, localizationService, utilityService) {
 
       $scope.dialogTreeApi = {};
-      $scope.foldersSupported = Umbraco.Sys.ServerVariables.umbracoPlugins.forms.storeUmbracoFormsInDb;
       $scope.title = "";
       $scope.copiedForm = {
         name: "",
@@ -1099,8 +1096,7 @@ angular.module("umbraco")
     function ($scope, $location, formResource, navigationService, formHelper, formsValidationService) {
       $scope.model = {
         folderName: "",
-        creatingFolder: false,
-        foldersSupported: Umbraco.Sys.ServerVariables.umbracoPlugins.forms.storeUmbracoFormsInDb
+        creatingFolder: false
       };
 
       var node = $scope.currentNode;
@@ -1111,7 +1107,7 @@ angular.module("umbraco")
 
       function navigateToCreateForm(templateAlias) {
         $location
-          .path("/forms/form/edit/" + $scope.currentNode.id)
+          .path("/forms/Form/edit/" + $scope.currentNode.id)
           .search("create", "true")
           .search("template", templateAlias);
         navigationService.hideNavigation();
@@ -1272,7 +1268,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EditController",
             "name": labels[1],
             "alias": "settings",
             "icon": "icon-settings",
-            "view": "/App_Plugins/UmbracoForms/Backoffice/Form/views/settings/settings.html",
+            "view": "/App_Plugins/UmbracoForms/backoffice/Form/views/settings/settings.html",
             "active": false
           }
         );
@@ -1281,7 +1277,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EditController",
             "name": labels[0],
             "alias": "design",
             "icon": "icon-document-dashed-line",
-            "view": "/App_Plugins/UmbracoForms/Backoffice/Form/views/design/design.html",
+            "view": "/App_Plugins/UmbracoForms/backoffice/Form/views/design/design.html",
             "active": true
           }
         );
@@ -1405,7 +1401,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EditController",
     $scope.editForm = function (form, section) {
       editorService.open(
         {
-          template: "/app_plugins/UmbracoForms/Backoffice/Form/dialogs/formsettings.html",
+          template: "/App_Plugins/UmbracoForms/backoffice/Form/dialogs/formsettings.html",
           form: form,
           section: section,
           page: $scope.currentPage
@@ -1663,7 +1659,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EntriesControlle
     $scope.edit = function (schema) {
       editorService.open(
         {
-          view: "/app_plugins/UmbracoForms/Backoffice/Form/dialogs/entriessettings.html",
+          view: "/App_Plugins/UmbracoForms/backoffice/Form/dialogs/entriessettings.html",
           schema: schema,
           toggle: $scope.toggleSelection,
           hiddenFields: $scope.hiddenFields,
@@ -1715,8 +1711,9 @@ angular.module("umbraco").controller("UmbracoForms.Editors.Form.EntriesControlle
           var itemToPush = {
             name: schemaItem.name,
             value: valueItem,
-            viewName: schemaItem.view,
-            view: '/app_plugins/umbracoforms/Backoffice/common/rendertypes/' + schemaItem.view + '.html',
+            view: schemaItem.view[0] === '~' || schemaItem.view[0] === '/'
+              ? schemaItem.view.replace('~/', '/')
+              : '/App_Plugins/UmbracoForms/backoffice/Common/RenderTypes/' + schemaItem.view + '.html',
             containsSensitiveData: schemaItem.containsSensitiveData
           };
 
@@ -2624,7 +2621,7 @@ angular.module("umbraco")
       vm.focusOnMandatoryField = false;
 
       var fieldTypePicker = {
-        view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/fieldtypepicker/field-type-picker.html",
+        view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/fieldtypepicker/field-type-picker.html",
         title: "Choose answer type",
         hideSubmitButton: true,
         size: "medium",
@@ -2849,7 +2846,7 @@ angular.module("umbraco")
             }
 
             // get the available forms
-            formPickerResource.getFormsForPicker($scope.model.allowedForms).then(function (response) {
+            formPickerResource.getFormsForPicker($scope.model.allowedForms || null).then(function (response) {
                 vm.forms = response;
                 vm.loading = false;
             }, function (err) {
@@ -2864,7 +2861,7 @@ angular.module("umbraco")
         function pickForm(form) {
 
             if(form.selected) {
-                            
+
                 // if form is already selected we deselect and remove it from the picked forms array
                 form.selected = false;
 
@@ -2873,7 +2870,7 @@ angular.module("umbraco")
                         $scope.model.selectedForms.splice(index, 1);
                     }
                 });
-                
+
             } else {
 
                 // set selected flag so we can show checkmark icon
@@ -2896,7 +2893,7 @@ angular.module("umbraco")
     }
 
     angular.module("umbraco").controller("UmbracoForms.FormPickerOverlayController", FormPickerOverlayController);
-    
+
 })();
 
 /**
@@ -3198,7 +3195,7 @@ angular.module("umbraco")
       // set overlay settings and open overlay
       localizationService.localize("formWorkflows_chooseWorkflow").then(function (val) {
         var workflowsTypesOverlay = {
-          view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/workflow-types.html",
+          view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/workflow-types.html",
           title: val,
           fields: $scope.model.fields,
           size: "medium",
@@ -3225,7 +3222,7 @@ angular.module("umbraco")
       var preEditedWorkflow = JSON.parse(JSON.stringify(workflow));
 
       var workflowSettingsOverlay = {
-        view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/workflow-settings.html",
+        view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/workflow-settings.html",
         title: workflow.name,
         workflow: workflow,
         fields: $scope.model.fields,
@@ -3286,7 +3283,7 @@ angular.module("umbraco")
 
       localizationService.localize("formWorkflows_messageOnSubmit").then(function (val) {
         var submitMessageWorkflowOverlay = {
-          view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/submit-message-workflow-settings.html",
+          view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/submit-message-workflow-settings.html",
           title: val,
           messageOnSubmit: $scope.model.messageOnSubmit,
           goToPageOnSubmit: $scope.model.goToPageOnSubmit,
@@ -3367,7 +3364,7 @@ angular.module("umbraco")
 
       // set overlay settings + open overlay
       var workflowSettingsOverlay = {
-        view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/workflow-settings.html",
+        view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/workflow-settings.html",
         title: selectedWorkflowType.name,
         workflow: $scope.model.workflow,
         workflowType: selectedWorkflowType,
@@ -3885,7 +3882,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
     function openFormPicker() {
       if (!vm.formPickerOverlay) {
         vm.formPickerOverlay = {
-          view: "../App_Plugins/UmbracoForms/Backoffice/Form/overlays/formpicker/formpicker.html",
+          view: "../App_Plugins/UmbracoForms/backoffice/Form/overlays/formpicker/formpicker.html",
           allowedForms: allowedForms,
           show: true,
           submit: function (model) {
@@ -3925,11 +3922,11 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
     }
 
     function openFormDesigner() {
-      $location.url("forms/form/edit/" + vm.selectedForm.id);
+      $location.url("forms/Form/edit/" + vm.selectedForm.id);
     }
 
     function openFormEntries() {
-      $location.url("forms/form/entries/" + vm.selectedForm.id);
+      $location.url("forms/Form/entries/" + vm.selectedForm.id);
     }
 
     function remove() {
@@ -3953,7 +3950,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
 
         vm.openFormPicker = openFormPicker;
         vm.remove = remove;
-        
+
         function onInit() {
 
             if(!$scope.model.value) {
@@ -3970,13 +3967,13 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
                 });
 
             }
-            
+
         }
 
         function openFormPicker() {
             if (!vm.formPickerOverlay) {
                 vm.formPickerOverlay = {
-                    view: "../App_Plugins/UmbracoForms/Backoffice/Form/overlays/formpicker/formpicker.html",
+                    view: "../App_Plugins/UmbracoForms/backoffice/Form/overlays/formpicker/formpicker.html",
                     multiPicker: true,
                     show: true,
                     submit: function (model) {
@@ -3984,7 +3981,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
                         if(model.selectedForms && model.selectedForms.length > 0) {
                             selectForms(model.selectedForms);
                         }
-                        
+
                         vm.formPickerOverlay.show = false;
                         vm.formPickerOverlay = null;
 
@@ -4047,7 +4044,7 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
 
         vm.openThemePicker = openThemePicker;
         vm.remove = remove;
-        
+
         function onInit() {
 
             //Only do this is we have a value saved
@@ -4062,14 +4059,14 @@ angular.module("umbraco").controller("UmbracoForms.Editors.PreValueSource.EditCo
         function openThemePicker() {
             if (!vm.themePickerOverlay) {
                 vm.themePickerOverlay = {
-                    view: "../App_Plugins/UmbracoForms/Backoffice/Form/overlays/themepicker/themepicker.html",
+                    view: "../App_Plugins/UmbracoForms/backoffice/Form/overlays/themepicker/themepicker.html",
                     show: true,
                     submit: function (model) {
 
                         vm.selectedTheme = model.selectedThemes[0];
                         vm.selectedTheme.icon = "icon-brush";
                         $scope.model.value = model.selectedThemes[0].name;
-                        
+
                         vm.themePickerOverlay.show = false;
                         vm.themePickerOverlay = null;
 
@@ -4335,7 +4332,7 @@ function licensingResource($http) {
         },
 
         getAvailableLicenses: function (config) {
-            return $http.post(apiRoot + "PostRetriveAvailableLicenses", config);
+            return $http.post(apiRoot + "PostRetrieveAvailableLicenses", config);
         },
 
         configureLicense: function (config) {
@@ -4429,6 +4426,7 @@ function preValueSourceResource($http) {
 }
 
 angular.module('umbraco.resources').factory('preValueSourceResource', preValueSourceResource);
+
 /**
     * @ngdoc service
     * @name umbraco.resources.dashboardResource
@@ -4441,11 +4439,11 @@ function recordResource($http) {
     return {
 
         getRecords: function (filter) {
-            return $http.post(apiRoot + "PostRetriveRecords", filter);
+            return $http.post(apiRoot + "PostRetrieveRecords", filter);
         },
 
         getRecordsCount: function (filter) {
-            return $http.post(apiRoot + "PostRetriveRecordsCount", filter);
+            return $http.post(apiRoot + "PostRetrieveRecordsCount", filter);
         },
 
         getRecordSetActions: function () {
@@ -4537,36 +4535,12 @@ function workflowResource($http) {
 
     return {
 
-        getScaffold: function (template) {
-            return $http.get(apiRoot + "GetScaffold");
-        },
-
-        getByGuid: function (id) {
-            return $http.get(apiRoot + "GetByGuid?guid=" + id);
-        },
-        deleteByGuid: function (id) {
-            return $http.delete(apiRoot + "DeleteByGuid?guid=" + id);
-        },
-        save: function (preValueSource) {
-            return $http.post(apiRoot + "PostSave", preValueSource);
-        },
-
-        validateSettings: function (preValueSource) {
-            return $http.post(apiRoot + "ValidateSettings", preValueSource);
-        },
-
         getAllWorkflowTypesWithSettings: function () {
             return $http.get(apiRoot + "GetAllWorkflowTypesWithSettings");
         },
+
         getAllWorkflows: function (formGuid) {
             return $http.get(apiRoot + "GetAllWorkflows?formGuid=" + formGuid);
-        },
-        updateSortOrder: function (state, workflowIds) {
-            var data = {};
-            data.state = state;
-            data.guids = workflowIds;
-
-            return $http.post(apiRoot + "UpdateSortOrder", data);
         },
         
         getScaffoldWorkflowType: function(workflowTypeId){
@@ -4581,6 +4555,7 @@ function workflowResource($http) {
 }
 
 angular.module('umbraco.resources').factory('workflowResource', workflowResource);
+
 angular.module("umbraco.directives")
     .directive('umbFormsAutoFocus', function($timeout) {
 
@@ -4643,7 +4618,7 @@ angular.module("umbraco.directives")
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-content-picker.html',
+        templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-content-picker.html',
         require: "ngModel",
         link: function (scope, element, attr, ctrl) {
 
@@ -4706,7 +4681,7 @@ angular.module("umbraco.directives").directive('umbFormsDateRangePicker', functi
     link: function (scope, element) {
       assetsService.load([
         "~/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js",
-        "~/App_Plugins/UmbracoForms/Assets/BaremetricsCalendar/public/js/calendar.js"
+        "~/App_Plugins/UmbracoForms/Assets/BaremetricsCalendar/public/js/Calendar.js"
       ]).then(function () {
         new Calendar({
           element: element.firstChild,
@@ -4774,7 +4749,7 @@ angular.module("umbraco.directives")
       transclude: true,
       restrict: 'E',
       replace: true,
-      templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-designer-new.html',
+      templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-designer-new.html',
       link: function (scope, element, attrs, ctrl) {
 
         scope.sortingMode = false;
@@ -4969,7 +4944,7 @@ angular.module("umbraco.directives")
 
           localizationService.localize("formEdit_editPage").then(function (val) {
             var pageSettingsOverlay = {
-              view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/pagesettings/page-settings.html",
+              view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/pagesettings/page-settings.html",
               title: val,
               page: page,
               fields: scope.fields,
@@ -5003,7 +4978,7 @@ angular.module("umbraco.directives")
 
           localizationService.localize("formEdit_editGroup").then(function (val) {
             var fieldsetSettingsOverlay = {
-              view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/fieldsetsettings/fieldset-settings.html",
+              view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/fieldsetsettings/fieldset-settings.html",
               title: val,
               fieldset: fieldset,
               fields: scope.fields,
@@ -5049,7 +5024,7 @@ angular.module("umbraco.directives")
 
           localizationService.localize("formEdit_addQuestion").then(function (val) {
             var fieldSettingsEditor = {
-              view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/fieldsettings/field-settings.html",
+              view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/fieldsettings/field-settings.html",
               title: val,
               field: emptyField,
               fields: scope.fields,
@@ -5075,7 +5050,7 @@ angular.module("umbraco.directives")
 
           localizationService.localize("formEdit_editQuestion").then(function (val) {
             var fieldSettingsOverlay = {
-              view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/fieldsettings/field-settings.html",
+              view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/fieldsettings/field-settings.html",
               title: val,
               field: field,
               fields: scope.fields,
@@ -5155,7 +5130,7 @@ angular.module("umbraco.directives")
 
             localizationService.localize("formEdit_editQuestion").then(function (val) {
               var workflowOverlay = {
-                view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/workflows-overview.html",
+                view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/workflows-overview.html",
                 title: val,
                 formWorkflows: scope.form.formWorkflows,
                 messageOnSubmit: scope.form.messageOnSubmit,
@@ -5186,7 +5161,9 @@ angular.module("umbraco.directives")
         };
 
         scope.editWorkflowSettings = function (workflow, collection, index) {
+
           if (scope.security && scope.security.userSecurity.manageWorkflows) {
+
 
             populateFields();
 
@@ -5194,7 +5171,7 @@ angular.module("umbraco.directives")
             var preEditedWorkflow = JSON.parse(JSON.stringify(workflow));
 
             var workflowSettingsOverlay = {
-              view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/workflow-settings.html",
+              view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/workflow-settings.html",
               workflow: workflow,
               fields: scope.fields,
               title: workflow.name,
@@ -5257,7 +5234,7 @@ angular.module("umbraco.directives")
 
           localizationService.localize("formWorkflows_messageOnSubmit").then(function (val) {
             var submitMessageWorkflowOverlay = {
-              view: "/app_plugins/UmbracoForms/Backoffice/Form/overlays/workflows/submit-message-workflow-settings.html",
+              view: "/App_Plugins/UmbracoForms/backoffice/Form/overlays/workflows/submit-message-workflow-settings.html",
               title: val,
               messageOnSubmit: scope.form.messageOnSubmit,
               goToPageOnSubmit: scope.form.goToPageOnSubmit,
@@ -5390,7 +5367,7 @@ angular.module("umbraco.directives")
     var directive = {
       restrict: 'E',
       replace: true,
-      templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-entry-detail.html',
+            templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-entry-detail.html',
       scope: {
         entry: '=',
         sensitiveDataAccess: '='
@@ -5410,7 +5387,7 @@ angular.module("umbraco.directives")
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-file-upload-editor.html',
+      templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-file-upload-editor.html',
       require: "ngModel",
       link: function (scope, element, attr, ctrl) {
         localizationService.localizeMany(["formFileUpload_allowAllFiles", "formFileUpload_allowOnlySpecifiedFiles"]).then(function (labels) {
@@ -5539,7 +5516,7 @@ angular.module("umbraco.directives")
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-inline-prevalue-editor.html',
+      templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-inline-prevalue-editor.html',
       require: "ngModel",
       link: function (scope, element, attr, ctrl) {
         scope.prevalues = [];
@@ -5584,7 +5561,7 @@ angular.module("umbraco.directives")
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-prevalue-editor.html',
+      templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-prevalue-editor.html',
       require: "ngModel",
       link: function (scope, element, attr, ctrl) {
 
@@ -5681,7 +5658,7 @@ angular.module("umbraco.directives")
         var directive = {
             restrict: 'E',
             replace: true,
-            templateUrl: '/App_Plugins/UmbracoForms/directives/umb-forms-render-type.html',
+            templateUrl: '/App_Plugins/UmbracoForms/Directives/umb-forms-render-type.html',
             scope: {
                 view: '=',
                 field: '=',

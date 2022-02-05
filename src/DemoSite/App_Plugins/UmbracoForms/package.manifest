@@ -7,7 +7,7 @@
       "group": "Pickers",
       "icon": "icon-umb-contour",
       "editor": {
-        "view": "~/App_Plugins/UmbracoForms/Backoffice/PropertyEditors/formpicker.html"
+        "view": "~/App_Plugins/UmbracoForms/backoffice/PropertyEditors/formpicker.html"
       },
       "prevalues": {
         "fields": [
@@ -15,7 +15,7 @@
             "label": "Allowed forms",
             "description": "The forms allowed, if none are selected all forms will be allowed",
             "key": "allowedForms",
-            "view": "~/App_Plugins/UmbracoForms/Backoffice/PropertyEditors/formpicker.prevalues.html"
+            "view": "~/App_Plugins/UmbracoForms/backoffice/PropertyEditors/formpicker.prevalues.html"
           }
         ]
       }
@@ -27,7 +27,7 @@
       "icon": "icon-brush",
       "isParameterEditor": true,
       "editor": {
-        "view": "~/App_Plugins/UmbracoForms/Backoffice/PropertyEditors/themepicker.html"
+        "view": "~/App_Plugins/UmbracoForms/backoffice/PropertyEditors/themepicker.html"
       }
     }
   ],
@@ -36,7 +36,7 @@
     {
       "name": "Form",
       "alias": "umbraco_form_picker",
-      "view": "/App_Plugins/UmbracoForms/Backoffice/GridEditors/formpicker.html",
+      "view": "/App_Plugins/UmbracoForms/backoffice/GridEditors/FormPicker.html",
       "render": "macro",
       "icon": "icon-umb-contour"
     }

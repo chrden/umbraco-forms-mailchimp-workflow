@@ -560,7 +560,7 @@
     <key alias="sendEmailBccEmailLabel">BCC E-mail</key>
     <key alias="sendEmailBccEmailDescription">Wprowadź adresy e-mail BCC (jeśli są wymagane).</key>
     <key alias="sendEmailSenderEmailLabel">E-mail nadawcy</key>
-    <key alias="sendEmailSenderEmailDescription">Wprowadź adres e-mail nadawcy (jeśli jest pusty, użyje ustawień z /config/umbracosettings.config).</key>
+    <key alias="sendEmailSenderEmailDescription">Wprowadź adres e-mail nadawcy (jeśli jest pusty, użyje ustawień z konfiguracja).</key>
     <key alias="sendEmailReplyToEmailLabel">Odpowiedz na e-mail</key>
     <key alias="sendEmailReplyToEmailDescription">Wprowadź adres e-mail, który ma być używany jako adres zwrotny (jeśli jest wymagany).</key>
     <key alias="sendEmailSubjectLabel">Temat</key>
@@ -579,13 +579,13 @@
     <key alias="sendEmailWithTemplateRazorBccEmailLabel">BCC E-mail</key>
     <key alias="sendEmailWithTemplateRazorBccEmailDescription">Wprowadź adresy e-mail BCC (jeśli są wymagane).</key>
     <key alias="sendEmailWithTemplateRazorSenderEmailLabel">E-mail nadawcy</key>
-    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Wprowadź adres e-mail nadawcy (jeśli jest pusty, użyje ustawień z /config/umbracosettings.config).</key>
+    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Wprowadź adres e-mail nadawcy (jeśli jest pusty, użyje ustawień z konfiguracja).</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailLabel">Odpowiedz na e-mail</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailDescription">Wprowadź adres e-mail, który ma być używany jako adres zwrotny (jeśli jest wymagany).</key>
     <key alias="sendEmailWithTemplateRazorSubjectLabel">Temat</key>
     <key alias="sendEmailWithTemplateRazorSubjectDescription">Wprowadź temat.</key>
     <key alias="sendEmailWithTemplateRazorRazorViewFilePathLabel">Szablon wiadomości e-mail</key>
-    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">Ścieżka do widoku Razor, którego chcesz użyć do wygenerowania wiadomości e-mail. Szablony wiadomości e-mail są przechowywane w /views/partials/forms/emails.</key>
+    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">Ścieżka do widoku Razor, którego chcesz użyć do wygenerowania wiadomości e-mail. Szablony wiadomości e-mail są przechowywane w /Views/Partials/Forms/Emails.</key>
     <key alias="sendEmailWithTemplateRazorAttachmentLabel">Załączniki</key>
     <key alias="sendEmailWithTemplateRazorAttachmentDescription">Załącz przesłane pliki do wiadomości e-mail.</key>
 
@@ -598,7 +598,7 @@
     <key alias="sendXSLTTransformedEmailBccEmailLabel">BCC E-mail</key>
     <key alias="sendXSLTTransformedEmailBccEmailDescription">Wprowadź adresy e-mail BCC (jeśli są wymagane).</key>
     <key alias="sendXSLTTransformedEmailSenderEmailLabel">E-mail nadawcy</key>
-    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Wprowadź adres e-mail nadawcy (jeśli pusty, użyje ustawień z /config/umbracosettings.config).</key>
+    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Wprowadź adres e-mail nadawcy (jeśli pusty, użyje ustawień z konfiguracja).</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailLabel">Odpowiedz na e-mail</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailDescription">Wprowadź adres e-mail, który ma być używany jako adres zwrotny (jeśli jest wymagany).</key>
     <key alias="sendXSLTTransformedEmailSubjectLabel">Temat</key>
@@ -624,19 +624,6 @@
   </area>
 
   <area alias="formProviderDataSources">
-    <key alias="webserviceName">Usługa internetowa</key>
-    <key alias="webserviceDescription">Wysyła wpisy do dowolnej usługi internetowej z obsługą WSDL.</key>
-    <key alias="webserviceServiceUrlLabel">URL</key>
-    <key alias="webserviceServiceUrlDescription">URL usługi internetowej.</key>
-    <key alias="webserviceUserNameLabel">Nazwa użytkownika</key>
-    <key alias="webserviceUserNameDescription">(opcjonalnie)</key>
-    <key alias="webservicePasswordLabel">Hasło</key>
-    <key alias="webservicePasswordDescription">(opcjonalnie)</key>
-    <key alias="webserviceServiceNameLabel">Nazwa usługi</key>
-    <key alias="webserviceServiceNameDescription">Usługa zawierająca metody wysyłania i odbierania wpisów.</key>
-    <key alias="webserviceInsertMethodLabel">Metoda</key>
-    <key alias="webserviceInsertMethodDescription">Metoda usługi, która może wstawiać wpisy.</key>
-
     <key alias="sQLDatabaseName">Baza danych SQL</key>
     <key alias="sQLDatabaseDescription">Łączy się z dowolną tabelą bazy danych obsługiwaną przez OLEDB i tworzy z niej źródło danych.</key>
     <key alias="sQLDatabaseConnectionLabel">Ciąg połączenia</key>

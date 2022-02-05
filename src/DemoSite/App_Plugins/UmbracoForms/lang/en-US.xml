@@ -52,7 +52,7 @@
         <p>Yes, additional domains can be added. You can purchase additional domains to your license from your account on Umbraco.com.</p>
         <h5>More questions?</h5>
         <p>
-          Don't worry, there's <a class="green-link" href="https://our.umbraco.com/Documentation/Add-ons/The-Licensing-model/index-v7?utm_source=core&utm_medium=dashboard&utm_content=buy-faq-link&utm_campaign=formslicensing">more details in the documentation</a> and you're also more than welcome to <a class="green-link" href="https://umbraco.com/contact-us?utm_source=core&utm_medium=dashboard&utm_content=contact-us-link&utm_campaign=formslicensing">get in touch with us</a>. We usually respond within a couple of hours.
+          Don't worry, there's <a class="green-link" href="https://our.umbraco.com/Documentation/Add-ons/The-Licensing-model?utm_source=core&utm_medium=dashboard&utm_content=buy-faq-link&utm_campaign=formslicensing">more details in the documentation</a> and you're also more than welcome to <a class="green-link" href="https://umbraco.com/contact-us?utm_source=core&utm_medium=dashboard&utm_content=contact-us-link&utm_campaign=formslicensing">get in touch with us</a>. We usually respond within a couple of hours.
         </p>      
       ]]>
     </key>
@@ -91,9 +91,9 @@
       <![CDATA[
         <h3 class="warning">Warning: your configuration settings are set to save plain text passwords!</h3>
         <p>When you use a password field on any of your forms, the data your visitors will enter in that field will be stored in plain text. This is a security issue and should be avoided.</p>
-        <p>To fix this issue, you can go in to your <span class="code">~/App_Plugins/UmbracoForms/UmbracoForms.config</span> file and set the key <span class="code">SavePlainTextPasswords</span> to <span class="code">False</span>.</p>
+        <p>To fix this issue, you can go in to your <span class="code">Umbraco:Forms:Security:SavePlainTextPasswords</span> file and set the key <span class="code">SavePlainTextPasswords</span> to <span class="code">False</span>.</p>
         <p>After updating this setting, make sure to recycle the application pool for the site for the new setting to become active.</p>
-        <p>Note: password values will still be passed on to workflows, regardless of the setting in <span class="code">UmbracoForms.config</span></p>
+        <p>Note: password values will still be passed on to workflows, regardless of the setting in configuration.</p>
       ]]>
     </key>
     <key alias="currentVersion">Current installed version of Umbraco Forms:</key>
@@ -320,10 +320,9 @@
     <key alias="captionNextButton">'Next' button label</key>
     <key alias="captionPreviousButton">'Previous' button label</key>
     <key alias="styling">Styling</key>
-    <key alias="stylingDescription">Add one or more classes to wrap your form to enable custom styling, disable default styling and load assets with Client Dependency.</key>
+    <key alias="stylingDescription">Add one or more classes to wrap your form to enable custom styling, or disable default styling.</key>
     <key alias="formCssClass">Form CSS class</key>
     <key alias="disableDefaultStylesheet">Disable default stylesheet</key>
-    <key alias="loadWithClientDependency">Load assets with Client Dependency</key>
     <key alias="validation">Validation</key>
     <key alias="validationDescription">Provide better validation messages, hide validation labels and change or disable the required/mandatory marker.</key>
     <key alias="mandatoryErrorMessage">Mandatory Error Message</key>
@@ -398,7 +397,7 @@
     <key alias="multipleChoiceDefaultValueLabel">Default Value</key>
     <key alias="multipleChoiceDefaultValueDescription">Enter a default value.</key>
     <key alias="multipleChoiceShowLabelLabel">Show Label</key>
-    <key alias="multipleChoiceShowLabelDescription">Indicate whether the field's label should be shown when rendering the form.</key>
+    <key alias="multipleChoiceShowLabelDescription">Indicate whether the the field's label should be shown when rendering the form.</key>
 
     <key alias="dataConsentName">Data Consent</key>
     <key alias="dataConsentDescription">Renders a field to ask for data consent.</key>
@@ -417,7 +416,7 @@
     <key alias="dropdownAllowMultipleSelectionsLabel">Allow multiple selections</key>
     <key alias="dropdownAllowMultipleSelectionsDescription">Indicate whether multiple selections from the list are allowed.</key>
     <key alias="dropdownShowLabelLabel">Show Label</key>
-    <key alias="dropdownShowLabelDescription">Indicate whether the field's label should be shown when rendering the form.</key>
+    <key alias="dropdownShowLabelDescription">Indicate whether the the field's label should be shown when rendering the form.</key>
     <key alias="dropdownAutocompleteAttributeLabel">Autocomplete attribute</key>
     <key alias="dropdownAutocompleteAttributeDescription">Optionally enter a value for the autocomplete attribute.</key>
 
@@ -439,7 +438,7 @@
     <key alias="singleChoiceDefaultValueLabel">Default Value</key>
     <key alias="singleChoiceDefaultValueDescription">Enter a default value.</key>
     <key alias="singleChoiceShowLabelLabel">Show Label</key>
-    <key alias="singleChoiceShowLabelDescription">Indicate whether the field's label should be shown when rendering the form.</key>
+    <key alias="singleChoiceShowLabelDescription">Indicate whether the the field's label should be shown when rendering the form.</key>
 
     <key alias="recaptcha2Name">reCAPTCHA v2</key>
     <key alias="recaptcha2Description">Google reCAPTCHA v3.</key>
@@ -471,7 +470,7 @@
     <key alias="longAnswerPlaceholderLabel">Placeholder</key>
     <key alias="longAnswerPlaceholderDescription">Enter a placeholder value.</key>
     <key alias="longAnswerShowLabelLabel">Show Label</key>
-    <key alias="longAnswerShowLabelDescription">Indicate whether the field's label should be shown when rendering the form.</key>
+    <key alias="longAnswerShowLabelDescription">Indicate whether the the field's label should be shown when rendering the form.</key>
     <key alias="longAnswerAutocompleteAttributeLabel">Autocomplete attribute</key>
     <key alias="longAnswerAutocompleteAttributeDescription">Optionally enter a value for the autocomplete attribute.</key>
     <key alias="longAnswerNumberOfRowsLabel">Number Of Rows</key>
@@ -486,7 +485,7 @@
     <key alias="shortAnswerPlaceholderLabel">Placeholder</key>
     <key alias="shortAnswerPlaceholderDescription">Enter a placeholder value.</key>
     <key alias="shortAnswerShowLabelLabel">Show Label</key>
-    <key alias="shortAnswerShowLabelDescription">Indicate whether the field's label should be shown when rendering the form.</key>
+    <key alias="shortAnswerShowLabelDescription">Indicate whether the the field's label should be shown when rendering the form.</key>
     <key alias="shortAnswerMaximumLengthLabel">Maximum Length</key>
     <key alias="shortAnswerMaximumLengthDescription">Enter the maximum number of characters accepted.</key>
     <key alias="shortAnswerFieldTypeLabel">Field Type</key>
@@ -560,7 +559,7 @@
     <key alias="sendEmailBccEmailLabel">BCC Email</key>
     <key alias="sendEmailBccEmailDescription">Enter the BCC email addresses (if required).</key>
     <key alias="sendEmailSenderEmailLabel">Sender Email</key>
-    <key alias="sendEmailSenderEmailDescription">Enter the sender email (if blank it will use the settings from /config/umbracosettings.config).</key>
+    <key alias="sendEmailSenderEmailDescription">Enter the sender email (if blank it will use the settings from configuration).</key>
     <key alias="sendEmailReplyToEmailLabel">Reply To Email</key>
     <key alias="sendEmailReplyToEmailDescription">Enter the email address to be used as the reply-to address (if required).</key>
     <key alias="sendEmailSubjectLabel">Subject</key>
@@ -579,13 +578,13 @@
     <key alias="sendEmailWithTemplateRazorBccEmailLabel">BCC Email</key>
     <key alias="sendEmailWithTemplateRazorBccEmailDescription">Enter the BCC email addresses (if required).</key>
     <key alias="sendEmailWithTemplateRazorSenderEmailLabel">Sender Email</key>
-    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Enter the sender email (if blank it will use the settings from /config/umbracosettings.config).</key>
+    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Enter the sender email (if blank it will use the settings from configuration).</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailLabel">Reply To Email</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailDescription">Enter the email address to be used as the reply-to address (if required).</key>
     <key alias="sendEmailWithTemplateRazorSubjectLabel">Subject</key>
     <key alias="sendEmailWithTemplateRazorSubjectDescription">Enter the subject.</key>
     <key alias="sendEmailWithTemplateRazorRazorViewFilePathLabel">Email Template</key>
-    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">The path to the Razor view that you want to use for generating the email. Email templates are stored at /views/partials/forms/emails.</key>
+    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">The path to the Razor view that you want to use for generating the email. Email templates are stored at /Views/Partials/Forms/Emails.</key>
     <key alias="sendEmailWithTemplateRazorAttachmentLabel">Attachments</key>
     <key alias="sendEmailWithTemplateRazorAttachmentDescription">Attach file uploads to email.</key>
 
@@ -598,7 +597,7 @@
     <key alias="sendXSLTTransformedEmailBccEmailLabel">BCC Email</key>
     <key alias="sendXSLTTransformedEmailBccEmailDescription">Enter the BCC email addresses (if required).</key>
     <key alias="sendXSLTTransformedEmailSenderEmailLabel">Sender Email</key>
-    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Enter the sender email (if blank it will use the settings from /config/umbracosettings.config).</key>
+    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Enter the sender email (if blank it will use the settings from configuration).</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailLabel">Reply To Email</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailDescription">Enter the email address to be used as the reply-to address (if required).</key>
     <key alias="sendXSLTTransformedEmailSubjectLabel">Subject</key>
@@ -624,19 +623,6 @@
   </area>
 
   <area alias="formProviderDataSources">
-    <key alias="webserviceName">Webservice</key>
-    <key alias="webserviceDescription">Sends records to any webservice with WSDL support.</key>
-    <key alias="webserviceServiceUrlLabel">Url</key>
-    <key alias="webserviceServiceUrlDescription">Webservice URL.</key>
-    <key alias="webserviceUserNameLabel">User name</key>
-    <key alias="webserviceUserNameDescription">(optional)</key>
-    <key alias="webservicePasswordLabel">Password</key>
-    <key alias="webservicePasswordDescription">(optional)</key>
-    <key alias="webserviceServiceNameLabel">Service Name</key>
-    <key alias="webserviceServiceNameDescription">The service containing the methods for sending and receiving records.</key>
-    <key alias="webserviceInsertMethodLabel">Method</key>
-    <key alias="webserviceInsertMethodDescription">The service method which can insert records.</key>
-
     <key alias="sQLDatabaseName">SQL Database</key>
     <key alias="sQLDatabaseDescription">Connects to any OLEDB supported database table and constructs a datasource from it.</key>
     <key alias="sQLDatabaseConnectionLabel">Connection String</key>
@@ -671,7 +657,7 @@
     <key alias="sQLDatabaseDescription">Connects to a OLEDB compatible Database Table and constructs a prevalue source from it.</key>
     <key alias="sQLDatabaseConnectionLabel">Connection String</key>
     <key alias="sQLDatabaseConnectionDescription">OleDB compatible connection string.</key>
-    <key alias="sQLDatabaseConnectionStringLabel">Connection String from web.config</key>
+    <key alias="sQLDatabaseConnectionStringLabel">Connection String from configuration</key>
     <key alias="sQLDatabaseConnectionStringDescription">Choose connection string (needs to be OleDB compatible).</key>
     <key alias="sQLDatabaseTableLabel">Table Name</key>
     <key alias="sQLDatabaseTableDescription"></key>

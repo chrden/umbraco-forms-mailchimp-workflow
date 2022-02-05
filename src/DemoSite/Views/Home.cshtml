@@ -1,7 +1,8 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Home>
-@using ContentModels = Umbraco.Web.PublishedModels;
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
-    Layout = null;
+	Layout = null;
 }
 
-@Umbraco.RenderMacro("renderUmbracoForm", new { FormGuid = "dad4add4-b834-4df9-82d2-8e13021639b0", FormTheme = "bootstrap3-horizontal" })
+@await Umbraco.RenderMacroAsync("renderUmbracoForm", new {FormGuid="2e57b3af-104c-49a9-ba09-8a899b485570", FormTheme="bootstrap3-horizontal", ExcludeScripts="1"})

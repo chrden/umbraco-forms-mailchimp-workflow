@@ -553,7 +553,7 @@
     <key alias="sendEmailBccEmailLabel">BCC Email</key>
     <key alias="sendEmailBccEmailDescription">Inserisci gli indirizzi email BCC (se richiesto).</key>
     <key alias="sendEmailSenderEmailLabel">Mittente dell'email</key>
-    <key alias="sendEmailSenderEmailDescription">Inserisci l'email del mittente (se vuoto utilizzerà le impostazioni da /config/umbracosettings.config).</key>
+    <key alias="sendEmailSenderEmailDescription">Inserisci l'email del mittente (se vuoto utilizzerà le impostazioni da configurazione).</key>
     <key alias="sendEmailReplyToEmailLabel">Rispondi All'Email</key>
     <key alias="sendEmailReplyToEmailDescription">Inserisci l'indirizzo email da utilizzare come indirizzo di risposta(se richiesto).</key>
     <key alias="sendEmailSubjectLabel">Oggetto</key>
@@ -572,13 +572,13 @@
     <key alias="sendEmailWithTemplateRazorBccEmailLabel">BCC Email</key>
     <key alias="sendEmailWithTemplateRazorBccEmailDescription">Inserisci gli indirizzi email BCC (se richiesto).</key>
     <key alias="sendEmailWithTemplateRazorSenderEmailLabel">Email del Mittente</key>
-    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Inserisci l'email del mittente (se vuoto utilizzerà le impostazioni da /config/umbracosettings.config).</key>
+    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Inserisci l'email del mittente (se vuoto utilizzerà le impostazioni da configurazione).</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailLabel">Rispondi All'Email</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailDescription">Inserisci l'indirizzo email da utilizzare come indirizzo per le risposte (se richiesto).</key>
     <key alias="sendEmailWithTemplateRazorSubjectLabel">Oggetto</key>
     <key alias="sendEmailWithTemplateRazorSubjectDescription">Inserisci l'oggetto.</key>
     <key alias="sendEmailWithTemplateRazorRazorViewFilePathLabel">Modello Email</key>
-    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">Il percorso alla visualizzazione Razor che desideri utilizzare per generare l'email. I modelli di email sono archiviati in /views/partials/forms/emails.</key>
+    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">Il percorso alla visualizzazione Razor che desideri utilizzare per generare l'email. I modelli di email sono archiviati in /Views/Partials/Forms/Emails.</key>
     <key alias="sendEmailWithTemplateRazorAttachmentLabel">Allegati</key>
     <key alias="sendEmailWithTemplateRazorAttachmentDescription">Allega i file caricati all'e-mail</key>
 
@@ -591,7 +591,7 @@
     <key alias="sendXSLTTransformedEmailBccEmailLabel">BCC Email</key>
     <key alias="sendXSLTTransformedEmailBccEmailDescription">Inserisci gli indirizzi email BCC (se richiesto).</key>
     <key alias="sendXSLTTransformedEmailSenderEmailLabel">Email del Mittente</key>
-    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Inserisci l'e-mail del mittente (se vuoto utilizzerà le impostazioni da /config/umbracosettings.config).</key>
+    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Inserisci l'e-mail del mittente (se vuoto utilizzerà le impostazioni da configurazione).</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailLabel">Rispondi All'Email</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailDescription">Inserisci l'indirizzo email da utilizzare come indirizzo per le risposte (se richiesto).</key>
     <key alias="sendXSLTTransformedEmailSubjectLabel">Oggetto</key>
@@ -617,19 +617,6 @@
   </area>
 
   <area alias="formProviderDataSources">
-    <key alias="webserviceName">Servizio web</key>
-    <key alias="webserviceDescription">Invia record a qualsiasi servizio Web con supporto WSDL.</key>
-    <key alias="webserviceServiceUrlLabel">Url</key>
-    <key alias="webserviceServiceUrlDescription">URL servizio web.</key>
-    <key alias="webserviceUserNameLabel">Nome utente</key>
-    <key alias="webserviceUserNameDescription">(opzionale)</key>
-    <key alias="webservicePasswordLabel">Password</key>
-    <key alias="webservicePasswordDescription">(opzionale)</key>
-    <key alias="webserviceServiceNameLabel">Nome del Servizio</key>
-    <key alias="webserviceServiceNameDescription">Il servizio contenente il metodo di invio e ricezione dei record.</key>
-    <key alias="webserviceInsertMethodLabel">Metodo</key>
-    <key alias="webserviceInsertMethodDescription">Il metodo del servizio che può inserire record. </key>
-
     <key alias="sQLDatabaseName">Database SQL</key>
     <key alias="sQLDatabaseDescription">Si collega a qualsiasi tabella di database supportata da OLEDB e costruisce un'origine dati da essa.</key>
     <key alias="sQLDatabaseConnectionLabel">Stringa di connessione</key>
@@ -664,7 +651,7 @@
     <key alias="sQLDatabaseDescription">Si connette a una tabella di database compatibile con OLEDB e costruisce una fonte di prevalore da essa.</key>
     <key alias="sQLDatabaseConnectionLabel">Stringa di Connessione</key>
     <key alias="sQLDatabaseConnectionDescription">Stringa di connessione compatibile con OleDB.</key>
-    <key alias="sQLDatabaseConnectionStringLabel"> Stringa di connessione da web.config</key>
+    <key alias="sQLDatabaseConnectionStringLabel"> Stringa di connessione da configurazione</key>
     <key alias="sQLDatabaseConnectionStringDescription">Scegli la stringa di connessione (deve essere compatibile con OleDB).</key>
     <key alias="sQLDatabaseTableLabel">Nome dell Tabella</key>
     <key alias="sQLDatabaseTableDescription"></key>

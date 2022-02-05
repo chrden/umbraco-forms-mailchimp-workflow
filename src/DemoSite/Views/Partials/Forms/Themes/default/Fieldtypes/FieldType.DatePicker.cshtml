@@ -1,6 +1,6 @@
-@model Umbraco.Forms.Mvc.Models.FieldViewModel        
+@model Umbraco.Forms.Web.Models.FieldViewModel        
 @{
-    string val = Model.Values.LastOrDefault()?.ToString() ?? string.Empty;
+    string val = Model.Values?.LastOrDefault()?.ToString() ?? string.Empty;
     if (Model.ValueAsObject != null && !Equals(Model.ValueAsObject, string.Empty))
     {
         try

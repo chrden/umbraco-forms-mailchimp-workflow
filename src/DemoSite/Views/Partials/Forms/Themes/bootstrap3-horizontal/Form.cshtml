@@ -1,9 +1,9 @@
-﻿@inherits WebViewPage<Umbraco.Forms.Web.Models.FormViewModel>
+@model Umbraco.Forms.Web.Models.FormViewModel
 @using Umbraco.Forms.Core.Enums
-@using Umbraco.Forms.Mvc
-@using Umbraco.Forms.Mvc.Models
-@using Umbraco.Forms.Mvc.BusinessLogic
-
+@using Umbraco.Forms.Web
+@using Umbraco.Forms.Web.Models
+@using Umbraco.Forms.Web.Services
+@inject IFormThemeResolver FormThemeResolver
 @*Set a default class on all fields - needed by bootstrap*@
 @Html.SetFormFieldClass("form-control")
 
@@ -17,7 +17,7 @@
     {
         <h4 class="umbraco-forms-caption">@Model.CurrentPage.Caption</h4>
     }
-                
+
     @if (Model.ShowValidationSummary)
     {
         @Html.ValidationSummary(false)
@@ -48,7 +48,7 @@
                                 @if (!f.HideLabel)
                                 {
                                     <label for="@f.Id" class="col-sm-2 control-label umbraco-forms-label">
-                                        @f.Caption 
+                                        @f.Caption
                                         @if (f.ShowIndicator)
                                         {
                                             <span class="umbracoForms-Indicator">@Model.Indicator</span>
@@ -58,7 +58,7 @@
 
                                 <div class="col-sm-10 umbraco-forms-field-wrapper">
 
-                                    @Html.Partial(FormThemeResolver.GetFieldView(Model, f), f)
+                                    @await Html.PartialAsync(FormThemeResolver.GetFieldView(Model, f), f)
 
                                     @if (Model.ShowFieldValidaton)
                                     {
@@ -89,9 +89,9 @@
         <input type="text" name="@Model.FormId.ToString().Replace("-", "")" />
     </div>
 
-		
+
     <div class="umbraco-forms-navigation row-fluid">
-		
+
         <div class="col-sm-10 col-sm-offset-2">
             @if (Model.IsMultiPage)
             {
@@ -119,4 +119,4 @@
 
 </div>
 
-@Html.Partial("Forms/Themes/default/ScrollToFormScript")
+@await Html.PartialAsync("Forms/Themes/default/ScrollToFormScript")

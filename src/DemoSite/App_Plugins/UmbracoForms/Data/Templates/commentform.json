@@ -99,7 +99,6 @@
   "storeRecordsLocally": true,
   "cssClass": null,
   "disableDefaultStylesheet": false,
-  "useClientDependency": false,
   "workflows": [],
   "datasource": null,
   "submitLabel": "Submit",

@@ -1,8 +1,8 @@
-@inherits System.Web.Mvc.WebViewPage<Umbraco.Forms.Web.Models.FormViewModel>
-@using ClientDependency.Core.Mvc
+@model Umbraco.Forms.Web.Models.FormViewModel
+
 @using Newtonsoft.Json
 @using Umbraco.Forms.Core
-@using Umbraco.Forms.Mvc
+@using Umbraco.Forms.Web
 
 @{
     var formJsObj = new
@@ -14,7 +14,7 @@
         recordValues = Model.GetFieldsNotDisplayed()
     };
 
-    Html.AddFormThemeScriptFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/umbracoforms.js");
+    Html.AddFormThemeScriptFile("~/App_Plugins/UmbracoForms/Assets/themes/default/umbracoforms.js");
 }
 
 <script type="application/javascript">
@@ -33,28 +33,11 @@
     {
         foreach (var partial in Model.CurrentPage.PartialViewFiles)
         {
-            @Html.Partial(partial.Value)
+            @await Html.PartialAsync(partial.Value)
         }
     }
-
 
     @* Render references to javascript files needed by fields on the current page*@
-    if (Model.UseClientDependency)
-    {
-        foreach (var script in Html.GetThemeScriptFiles(Model))
-        {
-            Html.RequiresJs(script.Value, Model.JavaScriptTagAttributes);
-        }
-
-        foreach (var css in Html.GetThemeCssFiles(Model))
-        {
-            Html.RequiresCss(css.Value);
-        }
-    }
-    else
-    {
-        @Html.RenderFormsScripts(Url, Model, Model.JavaScriptTagAttributes)
-        @Html.RenderFormsStylesheets(Url, Model)
-    }
-
+    @Html.RenderFormsScripts(Url, Model, Model.JavaScriptTagAttributes)
+    @Html.RenderFormsStylesheets(Url, Model)
 }

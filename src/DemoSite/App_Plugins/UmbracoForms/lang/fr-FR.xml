@@ -559,7 +559,7 @@
     <key alias="sendEmailBccEmailLabel">Courriel BCC</key>
     <key alias="sendEmailBccEmailDescription">Saisissez les adresses électroniques BCC (si nécessaire)..</key>
     <key alias="sendEmailSenderEmailLabel">Email de l'expéditeur</key>
-    <key alias="sendEmailSenderEmailDescription">Saisissez l'adresse électronique de l'expéditeur (si elle est vide, elle utilisera les paramètres de/config/umbracosettings.config).</key>
+    <key alias="sendEmailSenderEmailDescription">Saisissez l'adresse électronique de l'expéditeur (si elle est vide, elle utilisera les paramètres de configuration).</key>
     <key alias="sendEmailReplyToEmailLabel">Email de réponse</key>
     <key alias="sendEmailReplyToEmailDescription">Saisissez l'adresse électronique à utiliser comme adresse de réponse (si nécessaire).</key>
     <key alias="sendEmailSubjectLabel">Sujet</key>
@@ -578,13 +578,13 @@
     <key alias="sendEmailWithTemplateRazorBccEmailLabel">Email BCC</key>
     <key alias="sendEmailWithTemplateRazorBccEmailDescription">Saisissez les adresses électroniques des Cci (si nécessaire).</key>
     <key alias="sendEmailWithTemplateRazorSenderEmailLabel">Email de l'expéditeur</key>
-    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Saisissez l'adresse électronique de l'expéditeur (si elle est vide, les paramètres de l'option  /config/umbracosettings.config).</key>
+    <key alias="sendEmailWithTemplateRazorSenderEmailDescription">Saisissez l'adresse électronique de l'expéditeur (si elle est vide, les paramètres de l'option configuration).</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailLabel">Répondre à l'adresse électronique</key>
     <key alias="sendEmailWithTemplateRazorReplyToEmailDescription">Saisissez l'adresse électronique à utiliser comme adresse de réponse (si nécessaire).</key>
     <key alias="sendEmailWithTemplateRazorSubjectLabel">Sujet</key>
     <key alias="sendEmailWithTemplateRazorSubjectDescription">Saisissez le sujet.</key>
     <key alias="sendEmailWithTemplateRazorRazorViewFilePathLabel">Modèle d'e-mail</key>
-    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">Le chemin d'accès à la vue Razor que vous souhaitez utiliser pour générer l'e-mail. Les modèles d'email sont stockés dans /views/partials/forms/emails.</key>
+    <key alias="sendEmailWithTemplateRazorRazorViewFilePathDescription">Le chemin d'accès à la vue Razor que vous souhaitez utiliser pour générer l'e-mail. Les modèles d'email sont stockés dans /Views/Partials/Forms/Emails.</key>
     <key alias="sendEmailWithTemplateRazorAttachmentLabel">Pièces jointes</key>
     <key alias="sendEmailWithTemplateRazorAttachmentDescription">Joignez les téléchargements de fichiers à l'e-mail.</key>
 
@@ -597,7 +597,7 @@
     <key alias="sendXSLTTransformedEmailBccEmailLabel">Courriel BCC</key>
     <key alias="sendXSLTTransformedEmailBccEmailDescription">Saisissez les adresses électroniques des Cci (si nécessaire).</key>
     <key alias="sendXSLTTransformedEmailSenderEmailLabel">Email de l'expéditeur</key>
-    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Saisissez l'adresse électronique de l'expéditeur (si elle est vide, les paramètres de l'option /config/umbracosettings.config).</key>
+    <key alias="sendXSLTTransformedEmailSenderEmailDescription">Saisissez l'adresse électronique de l'expéditeur (si elle est vide, les paramètres de l'option configuration).</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailLabel">Répondre à l'adresse électronique seront utilisés</key>
     <key alias="sendXSLTTransformedEmailReplyToEmailDescription">Saisissez l'adresse électronique à utiliser comme adresse de réponse (si nécessaire).</key>
     <key alias="sendXSLTTransformedEmailSubjectLabel">Sujet</key>
@@ -623,19 +623,6 @@
   </area>
 
   <area alias="formProviderDataSources">
-    <key alias="webserviceName">Webservice</key>
-    <key alias="webserviceDescription">Envoie des enregistrements à n'importe quel webservice avec un support WSDL.</key>
-    <key alias="webserviceServiceUrlLabel">Url</key>
-    <key alias="webserviceServiceUrlDescription">Webservice URL.</key>
-    <key alias="webserviceUserNameLabel">Nom d'utilisateur</key>
-    <key alias="webserviceUserNameDescription">(facultatif)</key>
-    <key alias="webservicePasswordLabel">Mot de passe</key>
-    <key alias="webservicePasswordDescription">(facultatif)</key>
-    <key alias="webserviceServiceNameLabel">Nom du service</key>
-    <key alias="webserviceServiceNameDescription">Le service contenant les méthodes d'envoi et de réception des enregistrements.</key>
-    <key alias="webserviceInsertMethodLabel">Méthode</key>
-    <key alias="webserviceInsertMethodDescription">La méthode du service qui peut insérer des enregistrements.</key>
-
     <key alias="sQLDatabaseName">Base de données SQL</key>
     <key alias="sQLDatabaseDescription">Se connecte à toute table de base de données supportée par OLEDB et construit une source de données à partir de celle-ci.</key>
     <key alias="sQLDatabaseConnectionLabel">Chaîne de connexion</key>

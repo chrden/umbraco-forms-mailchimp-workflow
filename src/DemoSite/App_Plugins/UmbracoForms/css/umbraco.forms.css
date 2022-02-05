@@ -505,7 +505,7 @@ a.umb-forms-card .umb-box:hover {
   z-index: 99;
 }
 .umb-forms-install-overlay .succes {
-  background: url('../images/succes-green.png');
+  background: url('../Images/succes-green.png');
   background-size: 50%;
   background-position: center;
   background-repeat: no-repeat;
@@ -532,7 +532,7 @@ a.umb-forms-card .umb-box:hover {
   display: inline-block;
   height: 20px;
   width: 20px;
-  background: url('../images/close.png');
+  background: url('../Images/close.png');
   background-size: 20px 20px;
   background-repeat: no-repeat;
   vertical-align: middle;
@@ -1554,8 +1554,8 @@ input.umb-forms__page-name::-webkit-input-placeholder {
 }
 @font-face {
   font-family: 'icomoonforms';
-  src: url('../fonts/icomoon.eot?-6xypwb');
-  src: url('../fonts/icomoon.eot?#iefix-6xypwb') format('embedded-opentype'), url('../fonts/icomoon.woff?-6xypwb') format('woff'), url('../fonts/icomoon.ttf?-6xypwb') format('truetype'), url('../fonts/icomoon.svg?-6xypwb#icomoon') format('svg');
+  src: url('../Fonts/icomoon.eot?-6xypwb');
+  src: url('../Fonts/icomoon.eot?#iefix-6xypwb') format('embedded-opentype'), url('../Fonts/icomoon.woff?-6xypwb') format('woff'), url('../Fonts/icomoon.ttf?-6xypwb') format('truetype'), url('../Fonts/icomoon.svg?-6xypwb#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }

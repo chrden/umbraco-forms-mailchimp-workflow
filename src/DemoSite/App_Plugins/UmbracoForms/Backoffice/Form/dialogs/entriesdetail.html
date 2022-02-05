@@ -1,7 +1,7 @@
 <div class="umb-panel">
     <div class="umb-panel-body no-header with-footer">
 
-        
+
         <div class="umb-forms-settings">
             <h5>
                 Record with id: {{dialogOptions.row.id}}<br/>
@@ -21,7 +21,7 @@
                             <div ng-if="fieldSchema.view === 'text'">{{field}}</div>
                             <div
                                 ng-if="fieldSchema.view !== 'text'"
-                                ng-include="'/app_plugins/umbracoforms/Backoffice/common/rendertypes/' + fieldSchema.view + '.html'">
+                                ng-include="'/App_Plugins/UmbracoForms/backoffice/Common/RenderTypes/' + fieldSchema.view + '.html'">
                             </div>
                         </div>
 

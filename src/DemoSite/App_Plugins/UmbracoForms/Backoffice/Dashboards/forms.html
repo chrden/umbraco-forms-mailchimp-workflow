@@ -207,8 +207,8 @@
 
         <ul class="umb-forms-list">
             <li class="umb-forms-form" ng-repeat="form in vm.forms | limitTo:vm.formsLimit">
-                
-                <a class="umb-forms-card" ng-href="#/forms/form/entries/{{form.id}}">
+
+                <a class="umb-forms-card" ng-href="#/forms/Form/entries/{{form.id}}">
                 <umb-box>
                     <div class="card-name">
                         <h4>{{form.name}}</h4>
@@ -220,7 +220,7 @@
                     </div>
                 </umb-box>
                 </a>
-                
+
             </li>
         </ul>
 
@@ -231,7 +231,7 @@
         </div>
     </div>
 
-    <div ng-show="!vm.isLoading && !vm.status.isTrial && !vm.status.isInValid && !vm.hasUnrestrictedLicense(vm.status)">
+    <div ng-hide="vm.status.isTrial || vm.status.isInValid === true || vm.hasUnrestrictedLicense(vm.status) === true">
         <small><localize key="formsDashboard_licensedDomains"></localize>:</small>
         <small ng-bind-html="vm.displayLicensedDomains(vm.status)"></small>
     </div>

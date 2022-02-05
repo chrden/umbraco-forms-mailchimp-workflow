@@ -1,4 +1,4 @@
-@model Umbraco.Forms.Mvc.Models.FieldViewModel
+@model Umbraco.Forms.Web.Models.FieldViewModel
 
 <input type="checkbox" name="@Model.Name" id="@Model.Id" value="true"  data-umb="@Model.Id"
        @if(Model.Mandatory){<text>  data-val="true" data-val-requiredcb="@Model.RequiredErrorMessage"</text>}

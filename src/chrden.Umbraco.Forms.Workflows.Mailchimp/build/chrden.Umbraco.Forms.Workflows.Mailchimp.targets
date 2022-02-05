@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <chrdenUmbracoFormsWorkflowsMailchimpContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\**\*.*</chrdenUmbracoFormsWorkflowsMailchimpContentFilesPath>
+    </PropertyGroup>
+
+    <Target Name="CopychrdenUmbracoFormsWorkflowsMailchimpAssets" BeforeTargets="Build">
+        <ItemGroup>
+            <chrdenUmbracoFormsWorkflowsMailchimpContentFiles Include="$(chrdenUmbracoFormsWorkflowsMailchimpContentFilesPath)" />
+        </ItemGroup>
+        <Message Text="Copying chrden.Umbraco.Forms.Workflows.Mailchimp files: $(chrdenUmbracoFormsWorkflowsMailchimpContentFilesPath) - #@(chrdenUmbracoFormsWorkflowsMailchimpContentFiles->Count()) files"  Importance="high" />
+        <Copy
+            SourceFiles="@(chrdenUmbracoFormsWorkflowsMailchimpContentFiles)"
+            DestinationFiles="@(chrdenUmbracoFormsWorkflowsMailchimpContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true" />
+
+    </Target>
+
+    <Target Name="ClearchrdenUmbracoFormsWorkflowsMailchimpAssets" BeforeTargets="Clean">
+        <ItemGroup>
+            <chrdenUmbracoFormsWorkflowsMailchimpDir Include="$(MSBuildProjectDirectory)\App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\" />
+        </ItemGroup>
+        <Message Text="Clear old chrden.Umbraco.Forms.Workflows.Mailchimp data"  Importance="high" />
+        <RemoveDir Directories="@(chrdenUmbracoFormsWorkflowsMailchimpDir)"  />
+    </Target>
+
+</Project>

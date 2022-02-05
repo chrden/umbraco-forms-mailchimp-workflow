@@ -9,7 +9,7 @@
 
       <umb-checkbox model="copiedForm.copyWorkflows" label-key="formCopy_alsoCopyWorkflows"></umb-checkbox>
 
-      <div ng-if="foldersSupported">
+      <div>
 
         <umb-control-group>
           <umb-checkbox model="copiedForm.copyToNewFolder" label-key="formCopy_copyToNewFolder"></umb-checkbox>
@@ -17,7 +17,7 @@
 
         <umb-control-group localize="label" label="@formCopy_selectLocation" hide-label="false" ng-show="copiedForm.copyToNewFolder">
           <umb-tree section="forms"
-                    treealias="form"
+                    treealias="Form"
                     customtreeparams="foldersonly=1"
                     hideheader="false"
                     hideoptions="true"

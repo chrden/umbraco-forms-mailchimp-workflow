@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ContentTargetFolders>.</ContentTargetFolders>
+        <Product>chrden.Umbraco.Forms.Workflows.Mailchimp</Product>
+        <PackageId>chrden.Umbraco.Forms.Workflows.Mailchimp</PackageId>
+        <Title>chrden.Umbraco.Forms.Workflows.Mailchimp</Title>
+        <Description>...</Description>
+        <Product>...</Product>
+        <PackageTags>umbraco plugin package</PackageTags>
+        <RootNamespace>chrden.Umbraco.Forms.Workflows.Mailchimp</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.2.0"/>
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.2.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\**\*.*">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
+        <None Include="build\**\*.*">
+            <Pack>True</Pack>
+            <PackagePath>buildTransitive</PackagePath>
+        </None>
+    </ItemGroup>
+</Project>

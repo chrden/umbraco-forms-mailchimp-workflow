@@ -1,17 +1,19 @@
-@inherits WebViewPage<Umbraco.Forms.Web.Models.FormViewModel>
 @using Umbraco.Forms.Core.Enums
-@using Umbraco.Forms.Mvc
-@using Umbraco.Forms.Mvc.Models
-@using Umbraco.Forms.Mvc.BusinessLogic
+@using Umbraco.Forms.Web
+@using Umbraco.Forms.Web.Models
+@using Umbraco.Forms.Web.Services
 
+@model Umbraco.Forms.Web.Models.FormViewModel
 
-@{ 
+@inject IFormThemeResolver FormThemeResolver
+
+@{
     // here we load in the needed default assets for the form
     // this means that 3rd party themes can override these by implementing their own form.cshtml file
     //it will simply hook into standard way forms load assets
     if (Model.DisableDefaultStylesheet == false)
     {
-        Html.SetFormThemeCssFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/style.css");
+        Html.SetFormThemeCssFile(Model, "~/App_Plugins/UmbracoForms/Assets/themes/default/style.css");
     }
 }
 
@@ -48,15 +50,15 @@
                         {
                             bool hidden = f.HasCondition && f.ConditionActionType == FieldConditionActionType.Show;
 
-                            <div class="@Html.GetFormFieldWrapperClass(f.FieldTypeName) @f.CssClass" @{ if (hidden) { <text> style="display: none" </text>   } }>
+                            <div class="@Html.GetFormFieldWrapperClass(f.FieldTypeName) @f.CssClass" @{ if (hidden) { <text> style="display: none" </text>  } }>
 
                                 @if (!f.HideLabel)
                                 {
                                     <label for="@f.Id" class="umbraco-forms-label">
                                         @f.Caption @if (f.ShowIndicator)
-                                                   {
-                                                       <span class="umbraco-forms-indicator">@Model.Indicator</span>
-                                                   }
+                                        {
+                                            <span class="umbraco-forms-indicator">@Model.Indicator</span>
+                                        }
                                     </label>
                                 }
 
@@ -67,7 +69,7 @@
 
                                 <div class="umbraco-forms-field-wrapper">
 
-                                    @Html.Partial(FormThemeResolver.GetFieldView(Model, f), f)
+                                    @await Html.PartialAsync(FormThemeResolver.GetFieldView(Model, f), f)
 
                                     @if (Model.ShowFieldValidaton)
                                     {
@@ -98,38 +100,37 @@
             {
                 if (!Model.IsFirstPage)
                 {
-                    <input 
-                        class="btn prev cancel" 
-                        type="submit" 
-                        value="@Model.PreviousCaption" 
-                        name="__prev" />
+                    <input class="btn prev cancel"
+                           type="submit"
+                           value="@Model.PreviousCaption"
+                           name="__prev" />
                 }
 
                 if (!Model.IsLastPage)
                 {
-                    <input type="submit" 
-                           class="btn next" 
-                           value="@Model.NextCaption" 
+                    <input type="submit"
+                           class="btn next"
+                           value="@Model.NextCaption"
                            name="__next" />
                 }
 
                 if (Model.IsLastPage)
                 {
-                    <input type="submit" 
-                           class="btn primary" 
-                           value="@Model.SubmitCaption" 
-                           name="__next" data-umb="submit-forms-form"/>
+                    <input type="submit"
+                           class="btn primary"
+                           value="@Model.SubmitCaption"
+                           name="__next" data-umb="submit-forms-form" />
                 }
             }
             else
             {
-                <input type="submit" 
-                       class="btn primary" 
-                       value="@Model.SubmitCaption" 
+                <input type="submit"
+                       class="btn primary"
+                       value="@Model.SubmitCaption"
                        name="__next" data-umb="submit-forms-form" />
             }
         </div>
     </div>
 </div>
 
-@Html.Partial("Forms/Themes/default/ScrollToFormScript")
+@await Html.PartialAsync("Forms/Themes/default/ScrollToFormScript")
