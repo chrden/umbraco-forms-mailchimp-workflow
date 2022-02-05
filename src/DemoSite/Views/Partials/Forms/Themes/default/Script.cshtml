@@ -1,12 +1,14 @@
 @inherits System.Web.Mvc.WebViewPage<Umbraco.Forms.Web.Models.FormViewModel>
 @using ClientDependency.Core.Mvc
 @using Newtonsoft.Json
+@using Umbraco.Forms.Core
 @using Umbraco.Forms.Mvc
 
 @{
     var formJsObj = new
     {
         formId = Model.FormClientId,
+        pageButtonConditions = Model.PageButtonConditions,
         fieldSetConditions = Model.FieldsetConditions,
         fieldConditions = Model.FieldConditions,
         recordValues = Model.GetFieldsNotDisplayed()
@@ -15,9 +17,9 @@
     Html.AddFormThemeScriptFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/umbracoforms.js");
 }
 
-<script>
+<script type="application/javascript">
     if (typeof umbracoFormsCollection === 'undefined') var umbracoFormsCollection = [];
-    umbracoFormsCollection.push('@Html.Raw(Uri.EscapeUriString(JsonConvert.SerializeObject(formJsObj)))');
+    umbracoFormsCollection.push("@(Html.Raw(Uri.EscapeUriString(JsonConvert.SerializeObject(formJsObj, FormsJsonSerializerSettings.Default))))");
 </script>
 
 @* Only render out scripts on the page if the form has not been submitted yet *@
@@ -43,7 +45,7 @@
         {
             Html.RequiresJs(script.Value, Model.JavaScriptTagAttributes);
         }
-        
+
         foreach (var css in Html.GetThemeCssFiles(Model))
         {
             Html.RequiresCss(css.Value);
@@ -54,5 +56,5 @@
         @Html.RenderFormsScripts(Url, Model, Model.JavaScriptTagAttributes)
         @Html.RenderFormsStylesheets(Url, Model)
     }
-    
+
 }

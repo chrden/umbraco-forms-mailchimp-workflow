@@ -7,7 +7,7 @@
   "workflowTypeId": "68bdc512-f67c-480f-921c-3a7a1b35c512",
   "executesOn": "Submitted",
   "settings": {
-    "FieldMapping": "{\"listId\":\"6a7d8ee92a\",\"fieldMappings\":[{\"formFieldAlias\":\"name\",\"listFieldId\":\"FNAME\",\"staticValue\":\"\",\"isStatic\":false,\"$$hashKey\":\"object:371\",\"listFieldTag\":\"FNAME\"},{\"formFieldAlias\":\"email\",\"listFieldId\":\"GUESTS\",\"staticValue\":\"\",\"isStatic\":false,\"$$hashKey\":\"object:380\",\"listFieldTag\":\"EMAIL\"},{\"formFieldAlias\":\"\",\"listFieldId\":\"LNAME\",\"staticValue\":\"Test static\",\"isStatic\":true,\"$$hashKey\":\"object:393\",\"listFieldTag\":\"ADDRESS\"},{\"formFieldAlias\":\"\",\"listFieldId\":\"FNAME\",\"staticValue\":\"gdu\",\"isStatic\":true,\"$$hashKey\":\"object:391\",\"listFieldTag\":\"LNAME\"}]}"
+    "FieldMapping": "{\"listId\":\"6a7d8ee92a\",\"fieldMappings\":[{\"formFieldAlias\":\"name\",\"listFieldId\":\"FNAME\",\"staticValue\":\"\",\"isStatic\":false,\"$$hashKey\":\"object:371\",\"listFieldTag\":\"FNAME\"},{\"formFieldAlias\":\"email\",\"listFieldId\":\"GUESTS\",\"staticValue\":\"\",\"isStatic\":false,\"$$hashKey\":\"object:380\",\"listFieldTag\":\"EMAIL\"},{\"formFieldAlias\":\"\",\"listFieldId\":\"LNAME\",\"staticValue\":\"Test static 3\",\"isStatic\":true,\"$$hashKey\":\"object:393\",\"listFieldTag\":\"MMERGE6\"},{\"formFieldAlias\":\"\",\"listFieldId\":\"FNAME\",\"staticValue\":\"testing\",\"isStatic\":true,\"$$hashKey\":\"object:391\",\"listFieldTag\":\"LNAME\"}]}"
   },
   "sortOrder": 0
 }
