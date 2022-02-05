@@ -12,15 +12,15 @@
             <umb-editor-container>
                 <umb-box>
                     <umb-box-content class="form-horizontal">
-                        <umb-control-group label="Workflow Name" description="Give a descriptive name for your workflow">
+                        <umb-control-group localize="label,description" label="@formWorkflows_workflowNameLabel" description="@formWorkflows_workflowNameDescription">
                             <input type="text" ng-model="model.workflow.name" focus-when="{{vm.focusWorkflowName}}" required />
                         </umb-control-group>
-                        <umb-control-group label="Active" description="Enable or disable the workflow">
+                        <umb-control-group localize="label,description" label="@formWorkflows_activeLabel" description="@formWorkflows_activeDescription">
                           <umb-toggle checked="model.workflow.active"
                                       on-click="vm.toggleActive()">
                           </umb-toggle>
                         </umb-control-group>
-                        <umb-control-group label="Include Sensitive Data" description="Include sensitive data when executing this workflow?">
+                        <umb-control-group localize="label,description" label="@formWorkflows_includeSensitiveDataLabel" description="@formWorkflows_includeSensitiveDataDescription">
                           <umb-toggle checked="model.workflow.includeSensitiveData"
                                       on-click="vm.toggleIncludeSensitiveData()">
                           </umb-toggle>

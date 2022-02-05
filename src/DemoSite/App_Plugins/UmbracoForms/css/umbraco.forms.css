@@ -235,6 +235,13 @@ select.-full-width {
 .form-search {
   margin-right: 5px;
 }
+.umb-forms-grid-picker .umb-card-grid i {
+  font-size: 30px;
+  line-height: 20px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  display: block;
+}
 .umb-forms-grid-picker .umb-card-grid .umb-card-grid-item {
   padding: 20% 4px;
   height: 80px;
@@ -243,6 +250,16 @@ textarea.-full-width-input {
   width: 100%;
   box-sizing: border-box;
   padding: 4px 6px;
+}
+.umb-forms-toggle-with-separate-label button.umb-toggle {
+  display: inline;
+  margin-right: 6px;
+}
+.umb-forms-toggle-with-separate-label .umb-forms-toggle-with-separate-label__label {
+  color: #303033;
+}
+.umb-form-entries-list .umb-table__name {
+  flex: 1 1 10%;
 }
 .entries-table-wrapper {
   width: 100%;
@@ -333,6 +350,15 @@ textarea.-full-width-input {
 }
 .umb-forms-entry-sidebar .umb-control-group {
   padding-bottom: 5px;
+}
+.umb-export-type-select h5 {
+  margin-top: 0;
+}
+.umb-export-type-select li {
+  margin-bottom: 12px;
+}
+.umb-export-type-select li a:hover {
+  text-decoration: none;
 }
 .umb-dashboard-control hr {
   clear: both;
@@ -1180,11 +1206,12 @@ IFRAME {
   opacity: 1;
 }
 input.umb-forms__page-name {
-  border: none;
+  border: 1px solid #d8d7d9;
   color: #000000;
-  background-color: transparent;
+  background-color: #ffffff;
   margin: 0 0 0 3px;
-  padding: 0;
+  padding: 4px 6px;
+  font-weight: 700;
 }
 input.umb-forms__page-name::-webkit-input-placeholder {
   color: #68676b;
@@ -1199,7 +1226,7 @@ input.umb-forms__page-name::-webkit-input-placeholder {
   margin: 15px 0 0 15px;
 }
 .umb-forms__actions a,
-.umb-forms__actions span {
+.umb-forms__actions span.umb-forms__actions-action {
   margin: 0 0 10px;
   display: block;
   font-size: 18px;
@@ -1207,7 +1234,7 @@ input.umb-forms__page-name::-webkit-input-placeholder {
   cursor: pointer;
 }
 .umb-forms__actions a:hover,
-.umb-forms__actions span:hover {
+.umb-forms__actions span.umb-forms__actions-action:hover {
   color: #413659;
   text-decoration: none;
 }
@@ -1272,12 +1299,12 @@ input.umb-forms__page-name::-webkit-input-placeholder {
   align-items: center;
 }
 .umb-forms__fieldset-name {
-  border: none;
+  border: 1px solid #d8d7d9;
   background-color: transparent;
   color: #000000;
   font-weight: 700;
-  font-size: 13px;
-  padding: 0;
+  font-size: 14px;
+  padding: 2px 4px;
 }
 .umb-forms__fieldset-name:focus {
   outline: none;
@@ -1300,16 +1327,30 @@ input.umb-forms__page-name::-webkit-input-placeholder {
 .umb-forms__field-placeholder {
   background: #e9e9eb;
 }
+.umb-forms__page-condition,
+.umb-forms__fieldset-condition,
 .umb-forms__field-condition {
-  padding-top: 3px;
-  padding-right: 10px;
-  padding-bottom: 3px;
-  padding-left: 10px;
-  background-color: #f3f3f5;
-  font-size: 13px;
-  font-weight: bold;
-  width: 100%;
-  box-sizing: border-box;
+  font-size: 12px;
+  margin-left: 10px;
+  margin-top: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background: #f6f3fd;
+  border: 1px solid #413659;
+  border-radius: 3px;
+  display: inline-block;
+}
+.umb-forms__page-condition span,
+.umb-forms__fieldset-condition span,
+.umb-forms__field-condition span {
+  font-style: italic;
+}
+.umb-forms__page-condition {
+  margin-left: 0;
+  margin-top: 0;
 }
 .umb-forms__field-content {
   padding-top: 15px;
@@ -1403,6 +1444,7 @@ input.umb-forms__page-name::-webkit-input-placeholder {
 }
 .umb-forms__field-wrapper {
   flex: 1 1 auto;
+  background-color: #f3f3f5;
 }
 .umb-forms__field-preview {
   pointer-events: none;
@@ -1449,15 +1491,6 @@ input.umb-forms__page-name::-webkit-input-placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.umb-forms__fieldset-condition {
-  font-size: 12px;
-  color: #ffffff;
-  flex: 0 0 400px;
-  margin-left: 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .-element-column.umb-forms__field-preview input,
 .-element-column.umb-forms__field-preview textarea {

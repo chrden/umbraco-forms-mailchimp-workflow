@@ -47,18 +47,21 @@
 
         var forms = document.querySelectorAll('.umbraco-forms-form');
 
-        for( var i = 0; i < forms.length; i++) {
+        for(var i = 0; i < forms.length; i++) {
             var form = forms[i];
 
             dependencyCheck(form);
 
             var page = form.querySelector('.umbraco-forms-page');
             var conditions = new UmbracoFormsConditions(page,
+                formItem.pageButtonConditions,
                 formItem.fieldSetConditions,
                 formItem.fieldConditions,
                 formItem.recordValues);
             conditions.watch();
-        };
+
+            applyFormAccessibility(form);
+        }
     }
 
     /** Configures the jquery validation for Umbraco forms */
@@ -76,7 +79,7 @@
             });
             */
            
-            function required(value, element, params) {
+            var required = function (value, element) {
                 // Handle single and multiple checkboxes:
                 if(element.type.toLowerCase() === "checkbox" || element.type.toLowerCase() === "radio") {
                     var allCheckboxesOfThisName = element.form.querySelectorAll("input[name='"+element.name+"']");
@@ -93,29 +96,30 @@
             validationService.addProvider("required", required);// this will go instead of the build-in required.
 
 
-            function umbracoforms_regex(value, element, params) {
+            var umbracoforms_regex = function (value, element, params) {
                 if (!value || !params.pattern) {
                     return true;
                 }
         
-                let r = new RegExp(params.pattern);
+                var r = new RegExp(params.pattern);
                 return r.test(value);
             }
             validationService.addProvider("umbracoforms_regex", umbracoforms_regex);
 
-            function wrapProviderWithIgnorerBehaviour(provider) {
-                return async function(value, element, params) {
+            var wrapProviderWithIgnorerBehaviour = function (provider) {
+                return function(value, element, params) {
                     
                     // If field is hidden we ignorer the validation.
-                    if(element.offsetParent === null) {
+                    if (element.offsetParent === null) {
                         return true;
                     }
+
                     return provider(value, element, params);
                 }
             }
 
             // we can only incept with default validator if we do it after bootstrapping but before window load event triggers validationservice.
-            window.addEventListener('load', event => {
+            window.addEventListener('load', function() {
 
                 // Wrap all providers with ignorer hidden fields logic:
                 for (var key in validationService.providers) {
@@ -161,11 +165,12 @@
             $.validator.unobtrusive.adapters.addBool("regex", "umbracoforms_regex");
 
             var submitInputs = document.querySelectorAll(".umbraco-forms-form input[type=submit]:not(.cancel)");
-            for (var i = 0; i < submitInputs.length; i++) {
+            for (let i = 0; i < submitInputs.length; i++) {
                 var input = submitInputs[i];
                 input.addEventListener("click", function (evt) {
                     evt.preventDefault();
                     var frm = $(this).closest("form");
+                    resetValidationMessages(frm[0]);
                     frm.validate();
                     if (frm.valid()) {
                         frm.submit();
@@ -234,20 +239,115 @@
     }
 
     /**
+     * Applies form accessibility improvements.
+     * @param {Element} formEl the element of the form.
+     */
+    function applyFormAccessibility(formEl) {
+        setFocusToFirstElementOnValidationError(formEl);
+    }
+
+    /**
+     * Monitors for validation errors and when found sets the focus to the first field with an error.
+     * @param {Element} formEl the element of the form.
+     */
+    function setFocusToFirstElementOnValidationError(formEl) {
+        if ("MutationObserver" in window === false) {
+            return;
+        }
+
+        // To implement this, we are relying on on monitoring for validation message elements, which only fires when there are changes.
+        // So if you have two errors, and fix the first one, it wouldn't then highlight the second one on re-submitting the form.
+        // Unless we reset the validation messages on submit, so they get changed back on errors.
+        if (window.aspnetValidation !== undefined) {
+            var form = formEl.getElementsByTagName('form')[0];
+            var handleResetValidationMessages = function (event) {
+                resetValidationMessages(form);
+            };
+            form.addEventListener('submit', handleResetValidationMessages, false);
+        } else {
+            // For jquery.validate, we need to hook this in as part of the submit handler coded in configureUmbracoFormsValidation();
+        }
+
+        // Watch for changes to the validation error messages in the DOM tree using a MutationObserver.
+        // See: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+        var observer = new MutationObserver(function (mutationRecords) {
+            for (var i = 0; i < mutationRecords.length; i++) {
+                var mutationRecord = mutationRecords[i];
+                if (mutationRecord.target.className === 'field-validation-error') {
+                    setFocusOnFormField(mutationRecord.target);
+                    break;
+                }
+            }
+        });
+
+        observer.observe(formEl, {
+            attributes: true,
+            attributeFilter: ['class'],
+            childList: false,
+            characterData: false,
+            subtree: true
+        });
+    }
+
+    /**
+     * Resets the validation messages for a form.
+     * @param {Element} formEl the element of the form.
+     */
+    function resetValidationMessages(formEl) {
+        var validationErrorMessageElements = formEl.getElementsByClassName('field-validation-error');
+        for (var i = 0; i < validationErrorMessageElements.length; i++) {
+            validationErrorMessageElements[i].className = 'field-validation-valid';
+        }
+    }
+
+    /**
+     * Sets the focus to the form field input element associated with the provided validation message element.
+     * @param {Element} validationErrorEl the element of the validation error.
+     */
+    function setFocusOnFormField(validationErrorEl) {
+        var formFieldElement = validationErrorEl.previousElementSibling;
+        while (formFieldElement) {
+            if (formFieldElement.tagName.toLowerCase() === 'input' ||
+                formFieldElement.tagName.toLowerCase() === 'textarea' ||
+                formFieldElement.tagName.toLowerCase() === 'select') {
+                formFieldElement.focus();
+                break;
+            }
+
+            if (formFieldElement.classList.contains("radiobuttonlist") ||
+                formFieldElement.classList.contains("checkboxlist")) {
+                for (var i = 0; i < formFieldElement.children.length; i++) {
+                    var formFieldChildElement = formFieldElement.children[i];
+                    if (formFieldChildElement.tagName.toLowerCase() === 'input') {
+                        formFieldChildElement.focus();
+                        break;
+                    }
+                }
+
+                break;
+            }
+
+            formFieldElement = formFieldElement.previousElementSibling;
+        }
+     }
+
+    /**
      * Class to handle Umbraco Forms conditional statements
      * @param {any} form a reference to the form
+     * @param {any} pageButtonConditions a reference to the page button conditions
      * @param {any} fieldsetConditions a reference to the fieldset conditions
      * @param {any} fieldConditions a reference to the field conditions
      * @param {any} values the form values
      * @return {Object} reference to the created class
      */
-    function UmbracoFormsConditions(form, fieldsetConditions, fieldConditions, values) {
+    function UmbracoFormsConditions(form, pageButtonConditions, fieldsetConditions, fieldConditions, values) {
 
         //our conditions "class" - must always be newed to work as it uses a form instance to operate on
         //load all the information from the dom and serverside info and then the class will take care of the rest
 
         var self = {};
         self.form = form;
+        self.pageButtonConditions = pageButtonConditions;
         self.fieldsetConditions = fieldsetConditions;
         self.fieldConditions = fieldConditions;
         self.values = values;
@@ -257,33 +357,40 @@
         function populateFieldValues(page, formValues, dataTypes) {
 
             var selectFields = page.querySelectorAll("select");
-            for(var i=0; i<selectFields.length; i++) {
-                var field = selectFields[i];
-                formValues[field.getAttribute("id")] = field.value ? field.querySelector("option[value='" + field.value + "']").innerText : null;
+            for (let i = 0; i < selectFields.length; i++) {
+                const field = selectFields[i];
+                formValues[field.getAttribute("id")] = field.value ? field.querySelector("option[value='" + field.value.replace(/'/g, "\\'") + "']").innerText : null;
                 dataTypes[field.getAttribute("id")] = "select";
-            };
+            }
 
             var textareaFields = page.querySelectorAll("textarea");
-            for(var i=0; i<textareaFields.length; i++) {
-                var field = textareaFields[i];
+            for (let i=0; i<textareaFields.length; i++) {
+                const field = textareaFields[i];
                 formValues[field.getAttribute("id")] = field.value;
                 dataTypes[field.getAttribute("id")] = "textarea";
-            };
+            }
 
             // clear out all saved checkbox values to we can safely append
             var checkboxFields = page.querySelectorAll("input[type=checkbox]");
-            for(var i=0; i<checkboxFields.length; i++) {
-                var field = checkboxFields[i];
+            for (let i=0; i<checkboxFields.length; i++) {
+                const field = checkboxFields[i];
                 formValues[field.getAttribute("name")] = null;
                 dataTypes[field.getAttribute("id")] = "checkbox";
-            };
+            }
 
             //$page.find("input").each(function () {
             var inputFields = page.querySelectorAll("input");
-            for(var i=0; i<inputFields.length; i++) {
-                var field = inputFields[i];
+            for (let i=0; i<inputFields.length; i++) {
+                const field = inputFields[i];
 
-                if (field.getAttribute('type') === "text" || field.getAttribute("type") === "hidden") {
+                if (field.getAttribute('type') === "text" ||
+                    field.getAttribute('type') === "number" ||
+                    field.getAttribute('type') === "email" ||
+                    field.getAttribute('type') === "url" ||
+                    field.getAttribute('type') === "tel" ||
+                    field.getAttribute('type') === "date" ||
+                    field.getAttribute('type') === "datetime-local" ||
+                    field.getAttribute("type") === "hidden") {
                     formValues[field.getAttribute("id")] = field.value;
                     dataTypes[field.getAttribute("id")] = "text";
                 }
@@ -310,7 +417,7 @@
                         formValues[field.getAttribute("name")] = (field.matches(":checked") ? "true" : "false");
                     }
                 }
-            };
+            }
         }
 
         /* Public api */
@@ -358,19 +465,19 @@
                 }
                 return (value || "") !== unexpected && matchingUnexpected.length === 0;
             },
-            GreaterThen: function (value, limit, dataType) {
+            GreaterThen: function (value, limit) {
                 return parseInt(value) > parseInt(limit);
             },
-            LessThen: function (value, limit, dataType) {
+            LessThen: function (value, limit) {
                 return parseInt(value) < parseInt(limit);
             },
-            StartsWith: function (value, criteria, dataType) {
+            StartsWith: function (value, criteria) {
                 return value && value.indexOf(criteria) === 0;
             },
-            EndsWith: function (value, criteria, dataType) {
+            EndsWith: function (value, criteria) {
                 return value && value.indexOf(criteria) === value.length - criteria.length;
             },
-            Contains: function (value, criteria, dataType) {
+            Contains: function (value, criteria) {
                 return value && value.indexOf(criteria) > -1;
             }
         };
@@ -380,8 +487,8 @@
             // The only way around to pickup the value, for now, is to 
             // subscribe to blur events 
             var datepickerfields = self.form.querySelectorAll('.datepickerfield');
-            for(var i = 0; i < datepickerfields.length; i++) {
-                var field = datepickerfields[i];
+            for(let i = 0; i < datepickerfields.length; i++) {
+                const field = datepickerfields[i];
                 field.addEventListener('blur', function () {
                     if(this.value===""){
                         // Here comes the hack
@@ -399,8 +506,8 @@
             }
             //subscribe to change events
             var changeablefields = self.form.querySelectorAll("input, textarea, select");
-            for(var i = 0; i < changeablefields.length; i++) {
-                var field = changeablefields[i];
+            for(let i = 0; i < changeablefields.length; i++) {
+                const field = changeablefields[i];
                 field.addEventListener("change", function () {
                     populateFieldValues(self.form, self.values, self.dataTypes);
                     //process the conditions
@@ -459,6 +566,12 @@
                     success = true,
                     rule,
                     i;
+
+                // If we don't have any rules defined, we must return false (as neither 'any' nor 'all' of the conditions
+                // can be considered passing).
+                if (condition.rules.length === 0) {
+                    return false;
+                }
 
                 for (i = 0; i < condition.rules.length; i++) {
                     rule = condition.rules[i];
@@ -532,7 +645,7 @@
                 return true;
             }
 
-            function handleCondition(element, id, condition, type) {
+            function handleCondition(element, id, condition) {
                 var shouldShow = isVisible(id, condition);
                 if (element) {
                     if (shouldShow) {
@@ -544,14 +657,23 @@
                 }
             }
 
+            for (pageId in self.pageButtonConditions) {
+                if (Object.prototype.hasOwnProperty.call(self.pageButtonConditions, pageId)) {
+                    var pageElem = document.getElementById(pageId);
+                    if (pageElem) {
+                        handleCondition(pageElem.querySelector("input[name='__next'], button[name='__next']"), fsId, self.pageButtonConditions[pageId], "Page");
+                    }
+                }
+            }
+
             for (fsId in self.fieldsetConditions) {
-                if (self.fieldsetConditions.hasOwnProperty(fsId)) {
+                if (Object.prototype.hasOwnProperty.call(self.fieldsetConditions, fsId)) {
                     handleCondition(document.getElementById(fsId), fsId, self.fieldsetConditions[fsId], "Fieldset");// sadly we cant use querySelector with current mark-up (would need to prefix IDs)
                 }
             }
 
             for (fieldId in self.fieldConditions) {
-                if (self.fieldConditions.hasOwnProperty(fieldId)) {
+                if (Object.prototype.hasOwnProperty.call(self.fieldConditions, fieldId)) {
                     if (document.getElementById(fieldId)) {
                         handleCondition(document.getElementById(fieldId).closest(".umbraco-forms-field"),// sadly we cant use querySelector with current mark-up (would need to prefix IDs)
                             fieldId,

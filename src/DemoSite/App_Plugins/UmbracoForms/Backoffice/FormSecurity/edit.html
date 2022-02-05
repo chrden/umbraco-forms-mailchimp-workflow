@@ -18,36 +18,36 @@
                 <umb-box ng-if="!vm.loading">
                     <umb-box-content>
 
-                        <umb-control-group label="Manage Forms" description="Grant or deny access to managing forms">
+                        <umb-control-group localize="label,description" label="@formSecurity_manageFormsLabel" description="@formSecurity_manageFormsDescription">
                             <umb-toggle checked="vm.security.userSecurity.manageForms"
                                         on-click="vm.toggleManageForms()">
                             </umb-toggle>
                         </umb-control-group>
 
-                        <umb-control-group label="Manage Workflows" description="Grant or deny access to managing all forms workflow items">
+                        <umb-control-group localize="label,description" label="@formSecurity_manageWorkflowsLabel" description="@formSecurity_manageWorkflowsDescription">
                             <umb-toggle checked="vm.security.userSecurity.manageWorkflows"
                                         on-click="vm.toggleManageWorkflows()">
                             </umb-toggle>
                         </umb-control-group>
 
-                        <umb-control-group label="Manage Data Sources" description="Grant or deny access to managing any data sources for all forms">
+                        <umb-control-group localize="label,description" label="@formSecurity_manageDatasourcesLabel" description="@formSecurity_manageDatasourcesDescription">
                             <umb-toggle checked="vm.security.userSecurity.manageDataSources"
                                         on-click="vm.toggleManageDataSources()">
                             </umb-toggle>
                         </umb-control-group>
 
-                        <umb-control-group label="Manage PreValue Sources" description="Grant or deny access to managing any preValue sources for all forms">
+                        <umb-control-group localize="label,description" label="@formSecurity_managePrevalueSourcesLabel" description="@formSecurity_managePrevalueSourcesDescription">
                             <umb-toggle checked="vm.security.userSecurity.managePreValueSources"
                                         on-click="vm.togglePreValueSources()">
                             </umb-toggle>
                         </umb-control-group>
 
-                        <umb-control-group label="Form Security" description="Grant or deny access to individual forms" ng-if="vm.security.formsSecurity.length > 0">
+                        <umb-control-group localize="label,description" label="@formSecurity_manageIndividualFormsLabel" description="@formSecurity_manageIndividualFormsDescription" ng-if="vm.security.formsSecurity.length > 0">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Form Name</th>
-                                        <th>Has Access</th>
+                                        <th><localize key="formSecurity_formName"></localize></th>
+                                        <th><localize key="formSecurity_hasAccess"></localize></th>
                                     </tr>
                                 </thead>
                                 <tbody>

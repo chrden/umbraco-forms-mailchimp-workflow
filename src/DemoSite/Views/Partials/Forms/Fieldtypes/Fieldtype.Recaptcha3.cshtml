@@ -13,7 +13,7 @@
         @* Hidden Field to store token from invisible reCAPTCHA *@
         <input type="hidden" id="@Model.Id" name="g-recaptcha-response" />
 
-        <script>
+        <script type="application/javascript">
             (function (window, document) {
                 var hiddenField = document.getElementById('@Model.Id');
                 var timerFunction = function () {
