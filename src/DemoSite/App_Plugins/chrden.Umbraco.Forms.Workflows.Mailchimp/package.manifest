@@ -1,0 +1,17 @@
+{
+    propertyEditors: [
+        {
+            alias: "chrden.Umbraco.Forms.Workflows.Mailchimp.FieldMapping",
+            name: "Umbraco Forms Mailchimp field mapping",
+            icon: "icon-mindmap",
+            editor: {
+                view: "~/App_Plugins/chrden.Umbraco.Forms.Workflows.Mailchimp/fieldmapping.html"
+            }
+        }
+    ]
+    ,
+    javascript: [
+        '~/App_Plugins/chrden.Umbraco.Forms.Workflows.Mailchimp/fieldmapping.controller.js',
+        '~/App_Plugins/chrden.Umbraco.Forms.Workflows.Mailchimp/fieldmapping.resource.js',
+    ]
+}

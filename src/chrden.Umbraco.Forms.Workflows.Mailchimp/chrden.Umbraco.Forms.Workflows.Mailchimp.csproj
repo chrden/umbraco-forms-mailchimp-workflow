@@ -12,8 +12,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.2.0"/>
-        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.2.0"/>
+        <PackageReference Include="Umbraco.Cms.Core" Version="9.2.0" />
+        <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.2.0" />
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.2.0" />
+        <PackageReference Include="Umbraco.Forms.Core" Version="9.2.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,5 +27,13 @@
             <Pack>True</Pack>
             <PackagePath>buildTransitive</PackagePath>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\fieldmapping.controller.js" />
+      <Content Remove="App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\fieldmapping.html" />
+      <Content Remove="App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\fieldmapping.resource.js" />
+      <Content Remove="App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\lang\en-GB.xml" />
+      <Content Remove="App_Plugins\chrden.Umbraco.Forms.Workflows.Mailchimp\lang\en-US.xml" />
     </ItemGroup>
 </Project>

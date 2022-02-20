@@ -12,6 +12,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
         <PackageReference Include="Umbraco.Forms" Version="9.2.1" />
+        <ProjectReference Include="..\chrden.Umbraco.Forms.Workflows.Mailchimp\chrden.Umbraco.Forms.Workflows.Mailchimp.csproj" />
         <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2" />
     </ItemGroup>
 

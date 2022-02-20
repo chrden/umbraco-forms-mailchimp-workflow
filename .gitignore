@@ -58,3 +58,4 @@ src/.vs/
 src/DemoSite/App_Plugins/CD.UmbracoFormsMailchimpWorkflow
 src/DemoSite/App_Data/umbraco.licensing.log.txt
 src/DemoSite/[Uu]mbraco
+**/launchSettings.json

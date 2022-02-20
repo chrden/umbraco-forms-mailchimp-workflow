@@ -3,6 +3,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "https://ufmw-demo-v9.localtest.me",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:56289",
       "sslPort": 44384
@@ -18,12 +22,20 @@
     },
     "Umbraco.Web.UI": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44384;http://localhost:56289",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }      
+      },
+      "applicationUrl": "https://localhost:44384;http://localhost:56289",
+      "dotnetRunMessages": true
+    },
+    "IIS": {
+      "commandName": "IIS",
+      "workingDirectory": "C:\\Projects\\umbraco-forms-mailchimp-workflow\\src\\DemoSite",
+      "launchUrl": "https://ufmw-demo-v9.localtest.me",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
